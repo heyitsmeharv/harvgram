@@ -1,0 +1,14 @@
+.header {
+  width: 100%;
+  border: 1px solid rgba(219,219,219,1);
+}
+
+.header-title {
+  font-family: 'Oleo Script', cursive;
+  font-size: 4rem;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 50%;
+}

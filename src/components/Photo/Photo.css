@@ -1,0 +1,21 @@
+.photo {
+  border: 2px solid rgba(219,219,219,1);
+  width: 33%;
+  height: 33%;
+  margin: 4% 2%;
+}
+
+.photo-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 2rem;
+  color: black;
+}
+
+.photo-image {
+  width: 100%;
+}
+
+.photo-message {
+  font-size: 1.5rem;
+  color: black;
+}
