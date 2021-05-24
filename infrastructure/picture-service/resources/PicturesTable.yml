@@ -1,0 +1,20 @@
+PicturesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: PicturesTable-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      - AttributeName: tag
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: tag
+        KeySchema:
+          - AttributeName: tag
+            KeyType: HASH
+        Projection:
+          ProjectionType: ALL

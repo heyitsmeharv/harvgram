@@ -1,0 +1,17 @@
+PicturesBucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: ${self:custom.PicturesBucket.name}
+
+PicturesBucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: !Ref PicturesBucket
+    PolicyDocument:
+      Statement:
+        - Sid: PublicRead
+          Effect: Allow
+          Principal: '*'
+          Action:
+            - s3:GetObject
+          Resource: arn:aws:s3:::${self:custom.PicturesBucket.name}/*

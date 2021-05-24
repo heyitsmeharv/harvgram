@@ -1,0 +1,10 @@
+PicturesTableIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+    - dynamodb:Scan
+    - dynamodb:GetItem
+    - dynamodb:Query
+  Resource:
+    - ${self:custom.PicturesTable.arn}
+    - !Join ['/', [ '${self:custom.PicturesTable.arn}', 'index', 'tag' ]]

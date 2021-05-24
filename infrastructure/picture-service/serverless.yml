@@ -1,0 +1,63 @@
+service:
+  name: picture-service
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: 'eu-west-2'
+  environment:
+    PICTURES_TABLE_NAME: ${self:custom.PicturesTable.name}
+    PICTURES_BUCKET_NAME: ${self.custom.PicturesBucket.name}
+  iamRoleStatements:
+    - ${file(iam/PicturesTableIAM.yml):PicturesTableIAM}
+    - ${file(iam/PicturesBucketIAM.yml):PicturesBucketIAM}
+
+resources:
+  Resources:
+    PicturesTable: ${file(resources/PicturesTable.yml):PicturesTable}
+    PicturesBucket: ${file(resources/PicturesBucket.yml):PicturesBucket}
+    PicturesBucketPolicy: ${file(resources/PicturesBucket.yml):PicturesBucketPolicy}
+
+functions:
+  createPictureEntry:
+    handler: src/handlers/createPictureEntry.handler
+    events:
+      - http:
+          method: POST
+          path: /createPictureEntry
+
+  getPictures:
+    handler: src/handlers/getPictures.handler
+    events:
+      - http:
+          method: GET
+          path: /pictures
+
+  getPicture:
+    handler: src/handlers/getPicture.handler
+    events:
+      - http:
+          method: GET
+          path: /picture/{id}
+
+  uploadPicture:
+    handler: src/handlers/uploadPicture.handler
+    events:
+      - http:
+          method: PATCH
+          path: /picture/{id}/picture
+
+custom:
+  PicturesTable:
+    name: !Ref PicturesTable
+    arn: !GetAtt PicturesTable.Arn
+  PicturesBucket:
+    name: pictures-bucket-harvgram-${self:provider.stage}
+  bundle:
+    linting: false
