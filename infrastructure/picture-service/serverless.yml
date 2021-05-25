@@ -13,7 +13,7 @@ provider:
   region: 'eu-west-2'
   environment:
     PICTURES_TABLE_NAME: ${self:custom.PicturesTable.name}
-    PICTURES_BUCKET_NAME: ${self.custom.PicturesBucket.name}
+    PICTURES_BUCKET_NAME: ${self:custom.PicturesBucket.name}
   iamRoleStatements:
     - ${file(iam/PicturesTableIAM.yml):PicturesTableIAM}
     - ${file(iam/PicturesBucketIAM.yml):PicturesBucketIAM}

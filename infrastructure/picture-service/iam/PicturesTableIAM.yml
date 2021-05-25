@@ -5,6 +5,7 @@ PicturesTableIAM:
     - dynamodb:Scan
     - dynamodb:GetItem
     - dynamodb:Query
+    - dynamodb:UpdateItem
   Resource:
     - ${self:custom.PicturesTable.arn}
     - !Join ['/', [ '${self:custom.PicturesTable.arn}', 'index', 'tag' ]]
