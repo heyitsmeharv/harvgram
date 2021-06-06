@@ -5,25 +5,44 @@ import validator from '@middy/validator';
 import createError from 'http-errors';
 import createPictureSchema from '../lib/schemas/createPictureSchema';
 
+import { getPictureById } from './getPicture';
+import { uploadPictureToS3 } from '../lib/uploadPictureToS3';
+import { setPictureUrl } from '../lib/setPictureUrl';
+
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function createPictureEntry(event, context) {
-  const { title, message, tag } = event.body;
+  const { title, caption, tag, image } = event.body;
   const now = new Date();
 
-  const picture = {
+  const entry = {
     id: uuid(),
     title,
-    message,
+    caption,
     tag,
     createdAt: now.toISOString(),
   }
 
+  const base64 = image.replace(/^data:image\/w+;base64,/, '');
+  const buffer = Buffer.from(base64, 'base64');
+
   try {
     await dynamodb.put({
       TableName: process.env.PICTURES_TABLE_NAME,
-      Item: picture,
+      Item: entry,
     }).promise();
+  } catch (error) {
+    console.error(error);
+    throw new createError.InternalServerError(error);
+  }
+
+  let updatedAuction
+
+  try {
+    const pictureUrl = await uploadPictureToS3(entry.id + '.jpg', buffer);
+    updatedAuction = await setPictureUrl(entry.id, pictureUrl);
+    console.log(pictureUrl);
+    console.log(updatedAuction);
   } catch (error) {
     console.error(error);
     throw new createError.InternalServerError(error);
@@ -31,7 +50,7 @@ async function createPictureEntry(event, context) {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(picture),
+    body: JSON.stringify(entry, updatedAuction),
   };
 }
 

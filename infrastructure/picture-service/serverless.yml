@@ -31,6 +31,7 @@ functions:
       - http:
           method: POST
           path: /createPictureEntry
+          cors: true
 
   getPictures:
     handler: src/handlers/getPictures.handler
@@ -38,6 +39,7 @@ functions:
       - http:
           method: GET
           path: /pictures
+          cors: true
 
   getPicture:
     handler: src/handlers/getPicture.handler
@@ -45,6 +47,7 @@ functions:
       - http:
           method: GET
           path: /picture/{id}
+          cors: true
 
   uploadPicture:
     handler: src/handlers/uploadPicture.handler
@@ -52,6 +55,7 @@ functions:
       - http:
           method: PATCH
           path: /picture/{id}/picture
+          cors: true
 
 custom:
   PicturesTable:
