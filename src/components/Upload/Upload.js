@@ -105,9 +105,7 @@ const StyledInput = styled.input`
     font-size: 3rem;
   `}
   ${props => props.caption && css`
-    font-size: 2rem;
-  `}
-  ${props => props.caption && css`
+    width: 100%;
     font-size: 2rem;
   `}
 `;
