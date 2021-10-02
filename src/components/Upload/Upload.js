@@ -10,6 +10,12 @@ import { Close } from '@styled-icons/evaicons-solid/Close';
 import { Spinner2 } from '@styled-icons/icomoon/Spinner2'
 
 
+const StyledForm = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const PhotoContainer = styled(Box)`
   margin: 2%;
   border-radius: 20px;
@@ -85,6 +91,12 @@ const UploadIcon = styled.span`
   }
 `;
 
+const StlyedCloudUpload = styled(CloudUpload)`
+  width: 125px;
+  border-radius: 20px;
+  background: #f8f8f8;
+  padding: 80px;
+`;
 
 const StyledInput = styled.input`
   outline: none;
@@ -158,7 +170,7 @@ const Upload = ({ setUpload }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const uploadFile = payload => {
-    fetch(`https://2km6aa2wt5.execute-api.eu-west-2.amazonaws.com/dev/createPictureEntry`, {
+    fetch(`${process.env.REACT_APP_SERVICE_ENDPOINT}/dev/createPictureEntry`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -228,7 +240,7 @@ const Upload = ({ setUpload }) => {
         <CloseIcon><Close /></CloseIcon>
       </CloseButton>
       {imagePreview === '' ?
-        <form onChange={() => onFileChange(file)}>
+        <StyledForm onChange={() => onFileChange(file)}>
           <Box
             css={`
             min-height: 370px;
@@ -247,10 +259,10 @@ const Upload = ({ setUpload }) => {
             }
           `}
           >
-            <CloudUpload />
+            <StlyedCloudUpload />
             <input type="file" name="avatar" id="file" accept=".jpef, .png, .jpg" onChange={photoUpload} src={imagePreview} />
           </Box>
-        </form>
+        </StyledForm>
         :
         <>
           <Grow in={imagePreview !== ''}

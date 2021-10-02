@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { useAuth0 } from "@auth0/auth0-react";
 import styled from 'styled-components/macro';
 
 import {
   Box,
-  IconButton,
 } from "@material-ui/core";
 
-import { Camera } from '@styled-icons/boxicons-regular/Camera'
+import Profile from '../Auth/Profile';
 
 const Container = styled.section`
   max-width: 100%;
@@ -35,17 +35,8 @@ const Searchbar = styled.input`
   padding: 1rem;
 `;
 
-const Icon = styled.span`
-  svg {
-    width: 25px;
-    fill: black;
-  }
-  @media only screen and (max-width: 375px) {
-    margin-right: 10px;
-  }
-`;
+const Header = ({ userMetadata, setUpload, setSearchValue }) => {
 
-const Header = ({ setUpload, setSearchValue }) => {
   const handleChange = e => {
     setSearchValue({ value: e.target.value });
   }
@@ -64,10 +55,8 @@ const Header = ({ setUpload, setSearchValue }) => {
           type="file"
           style={{ display: 'none' }}
         />
-        <IconButton onClick={() => setUpload(true)} color="primary" aria-label="upload picture" component="span">
-          <Icon><Camera /></Icon>
-        </IconButton>
       </Box>
+      <Profile setUpload={setUpload} userMetadata={userMetadata} />
     </Container>
   )
 }

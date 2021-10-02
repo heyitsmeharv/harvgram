@@ -38,13 +38,25 @@ async function getPictures(event, context) {
     }
   }
 
-  pictures = result.Items;
-
-  return {
+  const response = {
     statusCode: 200,
-    body: JSON.stringify(pictures),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({
+      pictures: result.Items
+    }),
   };
+
+  return response;
+
+  // pictures = result.Items;
+
+  // return {
+  //   statusCode: 200,
+  //   body: JSON.stringify(pictures),
+  // };
 }
 
 export const handler = commonMiddleware(getPictures)
-

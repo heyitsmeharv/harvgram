@@ -13,6 +13,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function createPictureEntry(event, context) {
   const { title, caption, tag, image } = event.body;
+  const { nickname } = event.requestContext.authorizer;
   const now = new Date();
 
   const entry = {
@@ -21,6 +22,7 @@ async function createPictureEntry(event, context) {
     caption,
     tag,
     createdAt: now.toISOString(),
+    author: nickname,
   }
 
   const base64 = image.replace(/^data:image\/w+;base64,/, '');

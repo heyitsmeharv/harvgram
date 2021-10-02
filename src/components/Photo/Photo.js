@@ -22,6 +22,19 @@ const PhotoContainer = styled(Box)`
     box-shadow: 0 2px 5px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 5%);
   }
 
+  img {
+    cursor: zoom-in;
+  }
+
+  input[type=checkbox] {
+    display: none;
+  }
+
+  input[type=checkbox]:checked ~ label > img {
+    transform: scale(2);
+    cursor: zoom-out;
+  }
+
   @media only screen and (max-width: 375px) {
     width: auto;
   }
@@ -74,21 +87,15 @@ const Tag = styled.div`
   vertical-align: middle;
 `;
 
-const StyledInput = styled.input`
-    display: none;
-  input[type=checkbox] {
-    display: none;
-  }
-`;
-
-const Photo = ({ image, title, caption, date, tag }) => {
+const Photo = ({ id, image, title, caption, date, tag }) => {
   const prettyDate = hdate.prettyPrint(date);
   return (
     <Grow in={true}
       {...{ timeout: 1000 }}
     >
       <PhotoContainer>
-        <label htmlFor="zoomCheck">
+        <input type="checkbox" id={id} />
+        <label htmlFor={id}>
           <PhotoImage src={image} />
         </label>
         <Box
@@ -97,7 +104,6 @@ const Photo = ({ image, title, caption, date, tag }) => {
           min-height: 110px;
         `}
         >
-          <StyledInput type="checkbox" id="zoomCheck" />
           <PhotoTitle>
             {title}
           </PhotoTitle>

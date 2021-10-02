@@ -32,6 +32,7 @@ functions:
           method: POST
           path: /createPictureEntry
           cors: true
+          authorizer: ${self:custom.authorizer}
 
   getPictures:
     handler: src/handlers/getPictures.handler
@@ -40,7 +41,8 @@ functions:
           method: GET
           path: /pictures
           cors: true
-
+          authorizer: ${self:custom.authorizer}
+          
   getPicture:
     handler: src/handlers/getPicture.handler
     events:
@@ -48,6 +50,7 @@ functions:
           method: GET
           path: /picture/{id}
           cors: true
+          authorizer: ${self:custom.authorizer}
 
   uploadPicture:
     handler: src/handlers/uploadPicture.handler
@@ -56,8 +59,10 @@ functions:
           method: PATCH
           path: /picture/{id}/picture
           cors: true
+          authorizer: ${self:custom.authorizer}
 
 custom:
+  authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
   PicturesTable:
     name: !Ref PicturesTable
     arn: !GetAtt PicturesTable.Arn
