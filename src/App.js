@@ -18,7 +18,7 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    fetch('https://2km6aa2wt5.execute-api.eu-west-2.amazonaws.com/dev/pictures')
+    fetch('https://3i5bxy6zqe.execute-api.eu-west-2.amazonaws.com/dev/pictures')
       .then(response => {
         return response.json();
       }).then(pictures => {

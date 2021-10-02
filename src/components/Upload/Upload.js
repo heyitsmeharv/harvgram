@@ -94,9 +94,7 @@ const StyledInput = styled.input`
   `}
   ${props => props.caption && css`
     font-size: 2rem;
-  `}
-  ${props => props.caption && css`
-    font-size: 2rem;
+    width: 100%;
   `}
 `;
 
@@ -158,10 +156,11 @@ const Upload = ({ setUpload }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const uploadFile = payload => {
-    fetch(`https://2km6aa2wt5.execute-api.eu-west-2.amazonaws.com/dev/createPictureEntry`, {
+    fetch(`https://3i5bxy6zqe.execute-api.eu-west-2.amazonaws.com/dev/createPictureEntry`, {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': "*",
       },
       method: "POST",
       body: JSON.stringify(payload)
