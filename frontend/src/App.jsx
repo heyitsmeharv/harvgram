@@ -26,16 +26,16 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh - 64px" }}>
         <Header onUpload={handleUpload} onLogin={handleLogin} />
-        <Box display="flex" flexWrap="wrap" gap={2} sx={{ background: "primary", width: '200px', height: '200px' }}>
-          {images.map((url, index) => (
-            <Card key={index} sx={{ width: 200, border: `2px solid primary` }}>
-              <CardMedia component="img" height="200" image={url} alt="Uploaded" />
-            </Card>
-          ))}
+        <Box sx={{ flexGrow: 1, marginTop: "64px", padding: 2, backgroundColor: "primary.accent" }}>
+          <Container sx={{ backgroundColor: "accent.main", flexGrow: 1 }}>
+            {images.map((url, index) => (
+              {}
+            ))}
+          </Container>
         </Box>
-      </Container>
+      </Box>
     </ThemeProvider>
   )
 }

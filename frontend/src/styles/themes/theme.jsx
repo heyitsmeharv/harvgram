@@ -14,6 +14,9 @@ const theme = createTheme({
     highlight: {
       main: "#BBE1FA",
     },
+    background: {
+      main: "#ffffff"
+    },
     text: {
       primary: "#262626",
       secondary: "#8e8e8e",

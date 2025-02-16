@@ -1,3 +1,4 @@
-resource "aws_s3_bucket" "harvgram_frontend" {
-  bucket = "harvgram-frontend"
+resource "aws_s3_object" "harvgram" {
+  bucket = var.bucket_name
+  key    = "frontend/"
 }

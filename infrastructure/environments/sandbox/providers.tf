@@ -22,8 +22,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "harvgram-terraform-state"
-    key     = "sandbox/terraform.tfstate"
+    bucket  = "harvgram"
+    key     = "terraform-states/sandbox/harvgram.tfstate"
     region  = "eu-west-2"
     encrypt = true
   }
