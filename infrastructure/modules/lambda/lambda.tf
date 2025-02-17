@@ -1,6 +1,6 @@
 resource "aws_iam_role" "lambda_role" {
-  name               = "${locals.name}_lambda_role"
-  assume_role_policy = data.template_file.assume_role_policy_lambda
+  name               = "${local.name}_lambda_role"
+  assume_role_policy = data.template_file.assume_role_policy_lambda.rendered
 }
 
 resource "aws_iam_role_policy" "lambda_role_policy" {
@@ -9,7 +9,7 @@ resource "aws_iam_role_policy" "lambda_role_policy" {
 }
 
 resource "aws_lambda_function" "get_picture_lambda" {
-  function_name    = "${locals.name}_get_picture"
+  function_name    = "${local.name}_get_picture"
   description      = "Lambda to get picture"
   filename         = data.archive_file.get_picture_lambda.output_path
   source_code_hash = data.archive_file.get_picture_lambda.output_base64sha512
@@ -20,7 +20,28 @@ resource "aws_lambda_function" "get_picture_lambda" {
 
   environment {
     variables = {
-      TABLE_NAME = locals.name
+      TABLE_NAME = local.name
+    }
+  }
+
+  tracing_config {
+    mode = "Active"
+  }
+}
+
+resource "aws_lambda_function" "upload_picture_lambda" {
+  function_name    = "${local.name}_upload_picture"
+  description      = "Lambda to upload pictures"
+  filename         = data.archive_file.upload_picture_lambda.output_path
+  source_code_hash = data.archive_file.upload_picture_lambda.output_base64sha512
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "upload_picture.handler"
+  runtime          = var.lambda_runtime
+  timeout          = 30
+
+  environment {
+    variables = {
+      PICTURES_BUCKET_NAME = var.s3_picture_bucket
     }
   }
 

@@ -8,7 +8,9 @@ import { client, tracer } from "./libs/client.js";
 
 import createError from "http-errors";
 
-const logger = new Logger({ serviceName: "get_picture" });
+import { GetItemCommand } from "@aws-sdk/client-dynamodb";
+
+const logger = new Logger({ serviceName: "get_picture_lambda" });
 tracer.provider.setLogger(logger);
 
 const traceEvents = (response, data, success, err = null) => {
