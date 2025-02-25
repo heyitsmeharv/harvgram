@@ -11,8 +11,9 @@ module "dynamodb" {
 module "lambda" {
   source = "../../modules/lambda"
 
-  lambda_runtime    = var.lambda_runtime
-  s3_picture_bucket = module.s3.s3_picture_bucket
+  lambda_runtime         = var.lambda_runtime
+  s3_picture_bucket      = module.s3.s3_picture_bucket
+  dynamodb_picture_table = module.dynamodb.dynamodb_picture_table
 }
 
 module "api_gateway" {

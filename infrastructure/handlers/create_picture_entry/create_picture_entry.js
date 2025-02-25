@@ -1,18 +1,20 @@
-console.log("loading upload_picture lambda");
+console.log("loading create_picture_entry lambda");
 
 import { Logger, injectLambdaContext } from "@aws-lambda-powertools/logger";
 import { captureLambdaHandler } from "@aws-lambda-powertools/tracer";
 
 import commonMiddleware from "./libs/commonMiddleware.js";
-import { tracer } from "./libs/client.js";
+import { client, tracer } from "./libs/client.js";
 
 import createError from "http-errors";
 
-import { getPictureById } from '../get_picture/get_picture.js';
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+
 import { uploadPictureToS3 } from './libs/uploadPictureToS3.js';
 import { setPictureUrl } from './libs/setPictureUrl.js';
 
-const logger = new Logger({ serviceName: "upload_picture_lambda" });
+
+const logger = new Logger({ serviceName: "create_picture_entry_lambda" });
 tracer.provider.setLogger(logger);
 
 const traceEvents = (response, data, success, err = null) => {
@@ -24,7 +26,7 @@ const traceEvents = (response, data, success, err = null) => {
   }
 }
 
-async function uploadPicture(event) {
+const createPictureEntry = async (event, context) => {
   const { functionName, functionVersion, awsRequestId } = context;
   const metadata = {
     functionName,
@@ -42,33 +44,54 @@ async function uploadPicture(event) {
   }
   logger.info("Lambda execution details", { ...metadata, ...annotations });
 
-  const { id } = event.pathParameters;
-  const picture = await getPictureById(id);
-  const base64 = event.body.replace(/^data:image\/w+;base64,/, '');
+  const { title, caption, tag, image } = event.body;
+  const now = new Date();
+
+  const entry = {
+    id: uuid(),
+    title,
+    caption,
+    tag,
+    createdAt: now.toISOString(),
+  }
+
+  const base64 = image.replace(/^data:image\/w+;base64,/, '');
   const buffer = Buffer.from(base64, 'base64');
+
+  let params, putItem;
+  try {
+    params = {
+      TableName: process.env.PICTURES_TABLE_NAME,
+      Item: entry
+    }
+    putItem = await client.send(new PutItemCommand(params));
+    traceEvents(putItem, params, true);
+  } catch (error) {
+    console.error(error);
+    traceEvents(putItem, params, false, error);
+    throw new createError.InternalServerError(error);
+  }
 
   let updatedPicture
 
   try {
-    const pictureUrl = await uploadPictureToS3(picture.id + '.jpg', buffer);
-    updatedPicture = await setPictureUrl(picture.id, pictureUrl);
+    const pictureUrl = await uploadPictureToS3(entry.id + '.jpg', buffer);
+    updatedPicture = await setPictureUrl(entry.id, pictureUrl);
     console.log(pictureUrl);
     console.log(updatedPicture);
-    traceEvents({ ...pictureUrl, ...updatedPicture }, picture.id, true);
   } catch (error) {
-    logger.error("An error occurred", { message: "Error: failed to upload image", error, stackTrace: error.stack, xRayTraceId: tracer.getRootXrayTraceId() });
-    traceEvents({ ...pictureUrl, ...updatedPicture }, id, false, error);
+    console.error(error);
     throw new createError.InternalServerError(error);
   }
 
-  const response = { body: JSON.stringify(updatedPicture) }
+  const response = { body: JSON.stringify(entry, updatedPicture) }
 
   return {
     statusCode: 201,
     body: response,
   };
-}
+};
 
-export const handler = commonMiddleware(uploadPicture)
+export const handler = commonMiddleware(createPictureEntry)
   .use(injectLambdaContext(logger, { clearState: true }))
   .use(captureLambdaHandler(tracer));
