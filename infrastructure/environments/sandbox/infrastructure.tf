@@ -18,6 +18,8 @@ module "lambda" {
 
 module "cognito" {
   source = "../../modules/cognito"
+
+  certificate_arn = var.certificate_arn
 }
 
 module "api_gateway" {

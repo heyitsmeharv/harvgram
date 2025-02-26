@@ -12,3 +12,8 @@ variable "lambda_runtime" {
   description = "Runtime for lambda functions"
   type        = string
 }
+
+variable "certificate_arn" {
+  description = "arn of the custom domain certificate"
+  type        = string
+}

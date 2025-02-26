@@ -34,10 +34,16 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
 
   generate_secret                      = false
   prevent_user_existence_errors        = "ENABLED"
-  callback_urls                        = ["http://localhost:3000"]
-  logout_urls                          = ["http://localhost:3000/logout"]
+  callback_urls                        = ["https://auth.harvgram.co.uk"]
+  logout_urls                          = ["https://auth.harvgram.co.uk/logout"]
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
   allowed_oauth_flows_user_pool_client = true
   supported_identity_providers         = ["COGNITO"]
+}
+
+resource "aws_cognito_user_pool_domain" "custom_domain" {
+  domain       = "https://auth.harvgram.co.uk"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
+  certificate_arn = var.certificate_arn
 }
