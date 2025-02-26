@@ -18,7 +18,7 @@ tracer.provider.setLogger(logger);
 const traceEvents = (response, data, success, err = null) => {
   tracer.putMetadata("API_RESPONSE", { response });
   tracer.putMetadata("EVENT", JSON.stringify(data, null, 2));
-  tracer.putAnnotation("GET_PICTURE_SUCCESS", success);
+  tracer.putAnnotation("UPLOAD_PICTURE_SUCCESS", success);
   if (!success) {
     tracer.putMetadata("ERROR", { err });
   }

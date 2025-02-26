@@ -8,7 +8,7 @@ resource "aws_iam_role_policy" "lambda_role_policy" {
   policy = data.template_file.role_policy_lambda.rendered
 }
 
-resource "aws_lambda_function" "create_picture_entry" {
+resource "aws_lambda_function" "create_picture_entry_lambda" {
   function_name    = "${local.name}_create_picture_entry"
   description      = "Lambda to create picture entry"
   filename         = data.archive_file.create_picture_entry_lambda.output_path
@@ -20,7 +20,7 @@ resource "aws_lambda_function" "create_picture_entry" {
 
   environment {
     variables = {
-      PICTURES_BUCKET_NAME = var.dynamodb_picture_table
+      PICTURE_TABLE_NAME = var.dynamodb_picture_table
     }
   }
 

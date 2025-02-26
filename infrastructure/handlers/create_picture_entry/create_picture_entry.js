@@ -20,7 +20,7 @@ tracer.provider.setLogger(logger);
 const traceEvents = (response, data, success, err = null) => {
   tracer.putMetadata("API_RESPONSE", { response });
   tracer.putMetadata("EVENT", JSON.stringify(data, null, 2));
-  tracer.putAnnotation("GET_PICTURE_SUCCESS", success);
+  tracer.putAnnotation("CREATE_PICTURE_ENTRY_SUCCESS", success);
   if (!success) {
     tracer.putMetadata("ERROR", { err });
   }
@@ -61,7 +61,7 @@ const createPictureEntry = async (event, context) => {
   let params, putItem;
   try {
     params = {
-      TableName: process.env.PICTURES_TABLE_NAME,
+      TableName: process.env.PICTURE_TABLE_NAME,
       Item: entry
     }
     putItem = await client.send(new PutItemCommand(params));

@@ -16,8 +16,13 @@ module "lambda" {
   dynamodb_picture_table = module.dynamodb.dynamodb_picture_table
 }
 
+module "cognito" {
+  source = "../../modules/cognito"
+}
+
 module "api_gateway" {
   source = "../../modules/api_gateway"
 
-  lambda_arns = module.lambda.lambda_arns
+  lambda_arns           = module.lambda.lambda_arns
+  cognito_user_pool_arn = module.cognito.cognito_user_pool_arn
 }
