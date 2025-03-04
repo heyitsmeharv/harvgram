@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, Container, Card, CardMedia, Box, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { styled } from "@mui/system";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./styles/themes/theme.jsx";
 import './App.css';
@@ -8,6 +9,24 @@ import image from "./assets/profile-portrait.jpeg";
 
 import { Header } from "./components/Header/Header.jsx";
 import { Photo } from "./components/Photo/Photo.jsx";
+
+const StyledDialog = styled(Dialog)({
+  "& .MuiPaper-root": {
+    borderRadius: "16px",
+    padding: "20px",
+    background: "#ffffff",
+    boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)",
+    textAlign: "center"
+  }
+});
+
+const StyledButton = styled(Button)({
+  padding: "10px 20px",
+  borderRadius: "8px",
+  fontWeight: "bold",
+  textTransform: "none",
+  boxShadow: "none"
+});
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,17 +58,17 @@ function App() {
                 return <Photo key={img.id} date={img.createdAt} image={img.pictureUrl} title={img.title} tag={img.tag} caption={img.caption} />
               })}
             </Container>
-            : <Dialog open={!isLoggedIn} onClose={() => setIsLoggedIn(true)}>
-              <DialogTitle>Welcome!</DialogTitle>
+            : <StyledDialog open={!isLoggedIn} onClose={() => setIsLoggedIn(true)}>
+              <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Welcome!</DialogTitle>
               <DialogContent>
-                <p>Please log in or sign up to continue.</p>
+                <p style={{ color: "#666", marginBottom: "20px" }}>Please log in or request access to continue.</p>
               </DialogContent>
-              <DialogActions>
-                <Button variant="contained" color="primary">Login</Button>
-                <Button variant="contained" color="secondary">Request Access</Button>
-                <Button onClick={() => setIsLoggedIn(true)} color="inherit">Close</Button>
+              <DialogActions style={{ justifyContent: "center" }}>
+                <StyledButton variant="contained" color="primary">Login</StyledButton>
+                <StyledButton variant="contained" color="secondary">Request Access</StyledButton>
+                <StyledButton onClick={() => setIsLoggedIn(true)} color="inherit">Close</StyledButton>
               </DialogActions>
-            </Dialog>
+            </StyledDialog>
           }
         </Box>
       </Box>
