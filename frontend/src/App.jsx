@@ -59,7 +59,7 @@ function App() {
               })}
             </Container>
             : <StyledDialog open={!isLoggedIn} onClose={() => setIsLoggedIn(true)}>
-              <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Welcome!</DialogTitle>
+              <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bold", fontFamily: "Pacifico, cursive" }}>Harvgram</DialogTitle>
               <DialogContent>
                 <p style={{ color: "#666", marginBottom: "20px" }}>Please log in or request access to continue.</p>
               </DialogContent>
