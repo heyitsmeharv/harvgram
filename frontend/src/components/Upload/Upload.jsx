@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components/macro';
-
 import hdate from 'human-date';
 
-import { Box, Button, IconButton, Input, Typography, AppBar, Toolbar } from "@mui/material";
+import { Grow, Box, Button, IconButton, Input, Typography, AppBar, Toolbar } from "@mui/material";
 import { styled } from "@mui/system";
 
 import { CloudUpload } from '@styled-icons/boxicons-regular/CloudUpload';
@@ -179,11 +177,11 @@ const Upload = ({ setUpload }) => {
           <Grow in={imagePreview !== ''}
             {...{ timeout: 1000 }}
           >
-            <PhotoImage src={imagePreview} />
+            <image src={imagePreview} />
           </Grow>
           <UploadButton
             disabled={title === '' || caption === '' || tag === '' ? true : false}
-            onClick={(e) => onFileSubmit(e)}
+            onClick={(e) => {}}
           >
             <UploadIcon><CloudUpload /></UploadIcon>
           </UploadButton>

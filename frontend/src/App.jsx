@@ -54,9 +54,9 @@ function App() {
         <Box sx={{ flexGrow: 1, marginTop: "64px", padding: 2, backgroundColor: "primary.accent" }}>
           {isLoggedIn ?
             <Container sx={{ flexGrow: 1 }}>
-              {images.map(img => {
+              {/* {images.map(img => {
                 return <Photo key={img.id} date={img.createdAt} image={img.pictureUrl} title={img.title} tag={img.tag} caption={img.caption} />
-              })}
+              })} */}
             </Container>
             : <StyledDialog open={!isLoggedIn} onClose={() => setIsLoggedIn(true)}>
               <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bold", fontFamily: "Pacifico, cursive" }}>Harvgram</DialogTitle>
