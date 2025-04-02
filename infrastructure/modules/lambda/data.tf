@@ -6,6 +6,18 @@ data "template_file" "assume_role_policy_lambda" {
   template = file("${path.module}/iam/roles/lambda_assume_role_policy.json")
 }
 
+data "archive_file" "sign_up_lambda" {
+  type        = "zip"
+  source_dir  = "${path.module}/../../handlers/sign_up"
+  output_path = "${path.root}/lambda_output/sign_up.zip"
+}
+
+data "archive_file" "approve_user_lambda" {
+  type        = "zip"
+  source_dir  = "${path.module}/../../handlers/approve_user"
+  output_path = "${path.root}/lambda_output/approve_user.zip"
+}
+
 data "archive_file" "create_picture_entry_lambda" {
   type        = "zip"
   source_dir  = "${path.module}/../../handlers/create_picture_entry"

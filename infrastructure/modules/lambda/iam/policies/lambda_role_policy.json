@@ -4,13 +4,20 @@
     {
       "Effect": "Allow",
       "Action": [
+        "lambda:InvokeFunction",
         "dynamodb:GetItem",
         "dynamodb:PutItem",
         "dynamodb:UpdateItem",
         "dynamodb:DeleteItem",
         "dynamodb:Scan",
-        "dynamodb:Query"
-      ]
+        "dynamodb:Query",
+        "ses:SendEmail",
+        "ses:SendRawEmail",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }

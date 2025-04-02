@@ -6,18 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:docker": "docker-compose --env-file .env up --build harvgram-frontend",
+    "start:docker:prod": "docker-compose --env-file .env.production up --build harvgram-frontend",
+    "stop:docker": "docker-compose down"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.4.4",
-    "@mui/material": "^6.4.4",
+    "@mui/icons-material": "^6.4.7",
+    "@mui/material": "^6.4.7",
     "@mui/system": "^6.4.6",
+    "framer-motion": "^12.5.0",
     "human-date": "^1.4.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

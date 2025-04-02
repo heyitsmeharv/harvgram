@@ -1,0 +1,31 @@
+{
+  "name": "harvgram-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production  node src/app.js",
+    "dev": "cross-env NODE_ENV=development  nodemon src/app.js",
+    "build": "docker build -t harvgram-backend .",
+    "run": "docker run -p 5002:5002 --env-file .env harvgram-backend",
+    "start:docker": "docker-compose --env-file .env up --build backend",
+    "start:docker:prod": "docker-compose --env-file .env.production up --build backend",
+    "stop:docker": "docker-compose down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.777.0",
+    "@aws-sdk/client-lambda": "^3.775.0",
+    "aws-sdk": "^2.1692.0",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  }
+}

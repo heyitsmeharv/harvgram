@@ -1,0 +1,14 @@
+{
+  "name": "harvgram",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "start:docker": "docker-compose up --build",
+    "stop:docker": "docker-compose down",
+    "restart:docker": "docker-compose down && docker-compose up --build -d"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

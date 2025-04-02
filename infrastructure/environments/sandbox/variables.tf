@@ -13,7 +13,17 @@ variable "lambda_runtime" {
   type        = string
 }
 
-variable "certificate_arn" {
-  description = "arn of the custom domain certificate"
+variable "ses_from_email_address" {
+  description = "email address to send emails from"
+  type        = string
+}
+
+variable "ses_to_email_address" {
+  description = "email address to send emails to"
+  type        = string
+}
+
+variable "frontend_url" {
+  description = "url for frontend application"
   type        = string
 }

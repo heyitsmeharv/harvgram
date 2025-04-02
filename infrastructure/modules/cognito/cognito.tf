@@ -27,9 +27,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
 
   explicit_auth_flows = [
-    "ALLOW_USER_SRP_AUTH",
-    "ALLOW_REFRESH_TOKEN_AUTH",
-    "ALLOW_USER_PASSWORD_AUTH"
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH"
   ]
 
   generate_secret                      = false
@@ -40,10 +39,4 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
   allowed_oauth_flows_user_pool_client = true
   supported_identity_providers         = ["COGNITO"]
-}
-
-resource "aws_cognito_user_pool_domain" "custom_domain" {
-  domain       = "https://auth.harvgram.co.uk"
-  user_pool_id = aws_cognito_user_pool.user_pool.id
-  certificate_arn = var.certificate_arn
 }
