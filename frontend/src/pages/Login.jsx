@@ -10,26 +10,38 @@ const LoginContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh - 100px"
+  height: "100vh - 100px",
 }));
 
 const FormWrapper = styled(motion.div)(({ theme }) => ({
   maxWidth: 400,
   width: "100%",
   padding: theme.spacing(3),
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.main,
   boxShadow: theme.shadows[3],
   borderRadius: theme.shape.borderRadius,
+  transition: "background-color 0.3s ease",
 }));
 
-const StyledTextField = styled(TextField)({
+const StyledTextField = styled(TextField)(({ theme }) => ({
   marginBottom: "16px",
-});
+  color: theme.palette.text.main,
+}));
 
-const LoginButton = styled(Button)({
+const LoginButton = styled(Button)(({ theme }) => ({
   padding: "12px",
   marginTop: "12px",
-});
+  backgroundColor: theme.palette.button.main,
+  color: theme.palette.text.main,
+  borderColor: theme.palette.button.border,
+  border: "2px solid",
+  fontWeight: "bold",
+  "&:hover": {
+    backgroundColor: theme.palette.button.highlight,
+    borderColor: theme.palette.button.border,
+    transition: "background-color 0.3s ease",
+  }
+}));
 
 const Login = () => {
   const theme = useTheme();
@@ -103,7 +115,7 @@ const Login = () => {
     <LoginContainer>
       <FormWrapper
         initial={{ x: 0 }}
-        animate={error ? { x: [0, -10, 10, -10, 10, 0], backgroundColor: [theme.palette.background.paper, theme.palette.error.main, theme.palette.background.paper] } : {}}
+        animate={error ? { x: [0, -10, 10, -10, 10, 0], backgroundColor: [theme.palette.background.main, theme.palette.error.main, theme.palette.background.main] } : {}}
         transition={{ duration: 0.5 }}
       >
         <Typography variant="h5" align="center" fontWeight="bold" fontFamily="Pacifico, cursive" gutterBottom>
@@ -158,7 +170,7 @@ const Login = () => {
         </form>
         <Typography variant="body2" align="center" sx={{ mt: 2 }} fontWeight="bold" fontFamily="Pacifico, cursive">
           Don't have an account?{" "}
-          <Link href="/register" underline="hover" fontFamily="Pacifico, normal">
+          <Link href="/register" underline="hover" fontFamily="Pacifico, normal" color={theme.palette.text.main}>
             Request Access
           </Link>
         </Typography>

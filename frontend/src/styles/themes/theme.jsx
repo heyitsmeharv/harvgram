@@ -4,27 +4,28 @@ const theme = (mode) => createTheme({
   palette: {
     mode,
     primary: {
-      main: "#1B262C",
+      main: mode === "light" ? "#000" : "#edf2f4",
+      border: mode === "light" ? "#edf2f4" : "#000",
+      highlight: mode === "light" ? "#edf2f4" : "#000",
     },
     secondary: {
-      main: "#0F4C75",
+      main: mode === "light" ? "#FCA311" : "#fff",
+      border: mode === "light" ? "#000" : "#f5f5f5",
+      highlight: mode === "light" ? "#000" : "#f5f5f5",
     },
-    accent: {
-      main: "#3282B8",
-    },
-    highlight: {
-      main: "#BBE1FA",
+    button: {
+      main: mode === "light" ? "#FCA311" : "#FCA311",
+      border: mode === "light" ? "#000" : "#fff",
+      highlight: mode === "light" ? "#f5f5f5" : "#0d1b2a",
     },
     error: {
       main: "#D31717"
     },
     background: {
-      default: mode === "light" ? "#f5f5f5" : "#121212",
-      paper: mode === "light" ? "#ffffff" : "#1e1e1e",
+      main: mode === "light" ? "#f5f5f5" : "#000"
     },
     text: {
-      primary: mode === "light" ? "#333" : "#fff",
-      secondary: mode === "light" ? "#666" : "#bbb",
+      main: mode === "light" ? "#333" : "#fff",
     },
   },
   typography: {
@@ -42,8 +43,8 @@ const theme = (mode) => createTheme({
     "0px 2px 4px rgba(0,0,0,0.1)",  // Shadow level 1
     "0px 3px 6px rgba(0,0,0,0.15)", // Shadow level 2
     "0px 4px 8px rgba(0,0,0,0.2)",  // Shadow level 3 (default)
-    "0px 5px 10px rgba(0,0,0,0.25)", 
-    "0px 6px 12px rgba(0,0,0,0.3)", 
+    "0px 5px 10px rgba(0,0,0,0.25)",
+    "0px 6px 12px rgba(0,0,0,0.3)",
   ],
   breakpoints: {
     values: {
