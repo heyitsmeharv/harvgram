@@ -2,7 +2,7 @@ console.log("loading sign_up_lambda");
 
 import { Logger } from "@aws-lambda-powertools/logger";
 import { injectLambdaContext } from '@aws-lambda-powertools/logger/middleware';
-import { captureLambdaHandler } from "@aws-lambda-powertools/tracer/middleware";
+import { captureLambdaHandler } from '@aws-lambda-powertools/tracer/middleware';
 
 import commonMiddleware from "./libs/commonMiddleware.js";
 import { client, tracer } from "./libs/client.js";

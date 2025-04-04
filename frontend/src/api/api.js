@@ -32,3 +32,7 @@ export const forceChangePassword = async (session, username, newPassword) => {
 export const refreshToken = async (refreshToken) => {
   return await api.post("/refresh-token", { refreshToken });
 }
+
+export const uploadImage = async (payload) => {
+  return await api.post("/upload-image", { payload });
+}

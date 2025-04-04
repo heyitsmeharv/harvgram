@@ -1,7 +1,8 @@
 console.log("loading approve_user_lambda");
 
-import { Logger, injectLambdaContext } from "@aws-lambda-powertools/logger";
-import { captureLambdaHandler } from "@aws-lambda-powertools/tracer";
+import { Logger } from "@aws-lambda-powertools/logger";
+import { injectLambdaContext } from '@aws-lambda-powertools/logger/middleware';
+import { captureLambdaHandler } from '@aws-lambda-powertools/tracer/middleware';
 
 import commonMiddleware from "./libs/commonMiddleware.js";
 import { sesClient, cognitoClient, tracer } from "./libs/client.js";

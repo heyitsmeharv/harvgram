@@ -1,8 +1,12 @@
-import { Box, Button, InputBase, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, InputBase, Typography, IconButton } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/system";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+
+// components
+import UploadOverlay from "../components/UploadOverlay/UploadOverlay.jsx";
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -32,11 +36,22 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
   minWidth: "220px"
 }));
 
-const LogoutButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.button.main,
   color: theme.palette.text.main,
   borderColor: theme.palette.button.border,
   border: "2px solid",
+  fontWeight: "bold",
+  "&:hover": {
+    backgroundColor: theme.palette.button.highlight,
+    borderColor: theme.palette.button.border,
+    transition: "background-color 0.3s ease",
+  }
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: theme.palette.button.main,
+  color: theme.palette.text.main,
   fontWeight: "bold",
   "&:hover": {
     backgroundColor: theme.palette.button.highlight,
@@ -62,12 +77,21 @@ const GalleryImage = styled("img")(({ theme }) => ({
 const Home = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
   const images = [];
+
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleOverlaySubmit = () => {
+    setShowOverlay(!showOverlay);
   };
 
   return (
@@ -84,16 +108,26 @@ const Home = () => {
         <Typography variant="body1" sx={{ mr: 2 }}>
           {user?.email}
         </Typography>
-        <LogoutButton variant="contained" onClick={handleLogout}>
+        <StyledButton variant="contained" onClick={handleLogout}>
           Logout
-        </LogoutButton>
+        </StyledButton>
+        <StyledIconButton>
+          <CloudUploadIcon
+            onClick={() => setShowOverlay(true)}
+          />
+        </StyledIconButton>
       </TopBar>
       <GalleryGrid>
         {images.map((src, index) => (
           <GalleryImage key={index} src={src} alt={`Gallery ${index}`} />
         ))}
       </GalleryGrid>
-    </PageContainer>
+      <UploadOverlay
+        open={showOverlay}
+        onClose={() => setShowOverlay(false)}
+        onSubmit={handleOverlaySubmit}
+      />
+    </PageContainer >
   );
 }
 

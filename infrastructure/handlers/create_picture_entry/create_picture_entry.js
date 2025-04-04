@@ -1,10 +1,11 @@
 console.log("loading create_picture_entry lambda");
 
-import { Logger, injectLambdaContext } from "@aws-lambda-powertools/logger";
-import { captureLambdaHandler } from "@aws-lambda-powertools/tracer";
+import { Logger } from "@aws-lambda-powertools/logger";
+import { injectLambdaContext } from '@aws-lambda-powertools/logger/middleware';
+import { captureLambdaHandler } from '@aws-lambda-powertools/tracer/middleware';
 
 import commonMiddleware from "./libs/commonMiddleware.js";
-import { client, tracer } from "./libs/client.js";
+import { dynamoDBClient, tracer } from "./libs/client.js";
 
 import createError from "http-errors";
 
@@ -64,7 +65,7 @@ const createPictureEntry = async (event, context) => {
       TableName: process.env.PICTURE_TABLE_NAME,
       Item: entry
     }
-    putItem = await client.send(new PutItemCommand(params));
+    putItem = await dynamoDBClient.send(new PutItemCommand(params));
     traceEvents(putItem, params, true);
   } catch (error) {
     console.error(error);
