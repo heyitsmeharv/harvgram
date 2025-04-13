@@ -2,9 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { login, forceChangePassword } from "../api/api.js";
-import { Button, Box, CircularProgress, Link, TextField, Typography, useTheme } from "@mui/material";
+import { Button, Box, Link, TextField, Typography, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
 import { motion } from "framer-motion";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+
+import LoadingScreen from "../components/LoadingScreen/LoadingScreen.jsx";
 
 const LoginContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -24,6 +28,11 @@ const FormWrapper = styled(motion.div)(({ theme }) => ({
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: "16px",
+  color: theme.palette.text.main,
+}));
+
+const StyledOutlineInput = styled(OutlinedInput)(({ theme }) => ({
   marginBottom: "16px",
   color: theme.palette.text.main,
 }));
@@ -54,17 +63,22 @@ const Login = () => {
   const [isNewPasswordRequired, setIsNewPasswordRequired] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disableLoading, setDisableLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const redirectTo = "/home";
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-
+    setDisableLoading(false);
     try {
       const token = await login(email, password);
       if (token) {
+        setDisableLoading(true);
         if (token.challenge === "NEW_PASSWORD_REQUIRED") {
           authLogin({
             idToken: token.idToken,
@@ -80,21 +94,24 @@ const Login = () => {
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,
         });
-        navigate(redirectTo, { replace: true });
+        setTimeout(() => {
+          navigate(redirectTo, { replace: true });
+        }, 2000);
       } else {
+        setLoading(false);
         setError(true);
         setMessage("Invalid password/username.");
       }
     } catch (err) {
+      setLoading(false);
       setError(true);
       setMessage(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleSetNewPassword = async () => {
     setLoading(true);
+    setDisableLoading(false);
     try {
       const token = await forceChangePassword(user.session, email, newPassword);
       authLogin({
@@ -102,14 +119,20 @@ const Login = () => {
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
       });
-      navigate(redirectTo, { replace: true });
+      setDisableLoading(true);
+      setTimeout(() => {
+        navigate(redirectTo, { replace: true });
+      }, 2000);
     } catch (err) {
+      setLoading(false);
       setError(true);
       setMessage(err.message);
-    } finally {
-      setLoading(false);
     }
   };
+
+  if (loading && disableLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <LoginContainer>
@@ -131,16 +154,29 @@ const Login = () => {
             disabled={loading}
             required
           />
-          <StyledTextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-            required
-          />
+          <FormControl required fullWidth variant="outlined">
+            <InputLabel>Password</InputLabel>
+            <StyledOutlineInput
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              disabled={loading}
+              onChange={(e) => setPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment sx={{ marginRight: "10px" }}  position="end">
+                  <IconButton
+                    aria-label={
+                      showPassword ? 'hide the password' : 'display the password'
+                    }
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
           {isNewPasswordRequired && (
             <>
               <Typography variant="body" align="center" color={theme.palette.error.main}>Password Reset Required</Typography>
@@ -158,14 +194,7 @@ const Login = () => {
           )}
           {error && <Typography variant="body" align="center" color={theme.palette.error.main}>{message}</Typography>}
           <LoginButton type="submit" variant="contained" disabled={loading} fullWidth>
-            {loading ? (
-              <CircularProgress
-                size={24}
-                color="inherit"
-              />
-            ) : (
-              "Login"
-            )}
+            Login
           </LoginButton>
         </form>
         <Typography variant="body2" align="center" sx={{ mt: 2 }} fontWeight="bold" fontFamily="Pacifico, cursive">

@@ -3,8 +3,8 @@ variable "lambda_runtime" {
   type        = string
 }
 
-variable "s3_picture_bucket" {
-  description = "Name of the S3 bucket that stores images"
+variable "bucket_name" {
+  description = "Name of the existing S3 bucket"
   type        = string
 }
 

@@ -1,7 +1,7 @@
 {
-  "name": "upload_picture_lambda",
+  "name": "get_pictures_lambda",
   "version": "1.0.0",
-  "main": "upload_picture.js",
+  "main": "get_pictures.js",
   "author": "Adam Harvey - heyitsmeharv@gmail.com",
   "repository": {
     "url": "https://github.com/heyitsmeharv/harvgram"
@@ -11,14 +11,16 @@
     "@aws-lambda-powertools/metrics": "^2.14.0",
     "@aws-lambda-powertools/tracer": "^2.14.0",
     "@aws-sdk/client-dynamodb": "^3.749.0",
-    "@aws-sdk/client-s3": "^3.749.0",
+    "@aws-sdk/lib-dynamodb": "^3.786.0",
     "@aws-sdk/util-dynamodb": "^3.749.0",
     "@middy/core": "^6.0.0",
     "@middy/http-error-handler": "^6.0.0",
-    "@middy/http-event-normalizer": "^6.0.0",
+    "@middy/http-event-normalizer": "^6.1.6",
+    "@middy/http-header-normalizer": "^6.1.6",
     "@middy/http-json-body-parser": "^6.0.0",
     "@middy/validator": "^6.0.0",
-    "http-errors": "^2.0.0"
+    "http-errors": "^2.0.0",
+    "uuid": "^11.1.0"
   },
   "type": "module"
 }

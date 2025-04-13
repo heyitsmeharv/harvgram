@@ -17,8 +17,7 @@ const request = async (path, options = {}) => {
 
 export const api = {
   get: (path, options) => request(path, { method: "GET", ...options }),
-  post: (path, body, options) =>
-    request(path, { method: "POST", body: JSON.stringify(body), ...options }),
+  post: (path, body, options) => request(path, { method: "POST", body: JSON.stringify(body), ...options }),
 };
 
 export const login = async (email, password) => {
@@ -34,5 +33,9 @@ export const refreshToken = async (refreshToken) => {
 }
 
 export const uploadImage = async (payload) => {
-  return await api.post("/upload-image", { payload });
+  return await api.post("/upload-image", payload);
+}
+
+export const getImages = async () => {
+  return await api.get("/pictures", {});
 }

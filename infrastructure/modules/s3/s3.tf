@@ -5,5 +5,5 @@ resource "aws_s3_object" "harvgram" {
 
 resource "aws_s3_object" "picture_bucket" {
   bucket = var.bucket_name
-  key    = "pictures"
+  key    = "pictures/"
 }

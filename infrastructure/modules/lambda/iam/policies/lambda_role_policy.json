@@ -15,7 +15,10 @@
         "ses:SendRawEmail",
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:PutObjectAcl"
       ],
       "Resource": "*"
     }

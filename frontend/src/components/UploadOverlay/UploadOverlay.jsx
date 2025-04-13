@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { uploadImage } from "../../api/api.js";
 import {
   Backdrop,
@@ -8,7 +9,8 @@ import {
   TextField,
   Typography,
   IconButton,
-  Grow
+  Grow,
+  useTheme
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/system";
@@ -16,12 +18,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import hdate from 'human-date';
 
-const OverlayContainer = styled(Backdrop)({
+const MotionBackdrop = motion(Backdrop);
+const MotionBox = motion(Box);
+
+const OverlayContainer = styled(MotionBackdrop)(({ theme }) => ({
   zIndex: 1300,
   color: "#fff",
-});
-
-const MotionBox = motion(Box);
+}));
 
 const ContentBox = styled(MotionBox)(({ theme }) => ({
   backgroundColor: theme.palette.background.main,
@@ -77,7 +80,9 @@ const StyledText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.main
 }));
 
-export default function UploadOverlay({ open, onClose, onSubmit }) {
+export default function UploadOverlay({ open, onClose }) {
+  const theme = useTheme();
+  const queryClient = useQueryClient();
   const [imagePreview, setImagePreview] = useState(null);
   const [file, setFile] = useState();
   const [base64, setBase64] = useState();
@@ -87,22 +92,21 @@ export default function UploadOverlay({ open, onClose, onSubmit }) {
   const [date] = useState(new Date());
   const prettyDate = hdate.prettyPrint(date);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
   const uploadFile = async payload => {
     setLoading(true);
     try {
       await uploadImage(payload);
+      queryClient.invalidateQueries(['pictures']);
+      onClose();
     } catch (err) {
-      setError(true);
       setMessage(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const onFileSubmit = () => {
+  const onFileSubmit = e => {
     const reader = new FileReader();
     reader.onload = handleReaderLoaded;
     reader.readAsBinaryString(file);
@@ -122,52 +126,42 @@ export default function UploadOverlay({ open, onClose, onSubmit }) {
     }
   };
 
-  // const onFileChange = e => {
-  //   let file = e ? e.target.files[0] : null;
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = handleReaderLoaded;
-  //     reader.readAsBinaryString(file);
-  //   }
-  // }
-
-  const handleFileChange = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      setBase64(base64String);
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
+  const onFileChange = e => {
+    let file = e ? e.target.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = handleReaderLoaded;
+      reader.readAsBinaryString(file);
+    }
+  }
 
   const handleReaderLoaded = readerEvt => {
     let binaryString = readerEvt.target.result;
     setBase64(btoa(binaryString))
   };
 
-  // const photoUpload = (e) => {
-  //   e.preventDefault();
-  //   const reader = new FileReader();
-  //   const file = e.target.files[0];
-  //   if (reader !== undefined && file !== undefined) {
-  //     reader.onloadend = () => {
-  //       setFile(file);
-  //       setImagePreview(reader.result);
-  //     }
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+  const photoUpload = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    if (reader !== undefined && file !== undefined) {
+      reader.onloadend = () => {
+        setFile(file);
+        setImagePreview(reader.result);
+      }
+      reader.readAsDataURL(file);
+    }
+  }
 
   return (
     <AnimatePresence>
       {open && (
-        <OverlayContainer open={open}>
+        <OverlayContainer
+          // initial={{ x: 0 }}
+          // animate={error ? { x: [0, -10, 10, -10, 10, 0], backgroundColor: [theme.palette.background.main, theme.palette.error.main, theme.palette.background.main] } : {}}
+          // transition={{ duration: 0.5 }}
+          open={open}
+        >
           <ContentBox
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -189,10 +183,10 @@ export default function UploadOverlay({ open, onClose, onSubmit }) {
               Upload
             </StyledText>
             {imagePreview === null ?
-              <form>
+              <form onChange={() => onFileChange(file)}>
                 <UploadButton>
-                  <CloudUploadIcon fontSize="large" onClick={handleFileChange} sx={{ mb: 1 }} />
-                  <input type="file" accept="image/*" onChange={handleFileChange} src={imagePreview} />
+                  <CloudUploadIcon fontSize="large" sx={{ mb: 1 }} />
+                  <input type="file" accept="image/*" onChange={photoUpload} src={imagePreview} />
                 </UploadButton>
               </form>
               :
@@ -240,7 +234,7 @@ export default function UploadOverlay({ open, onClose, onSubmit }) {
             <Button
               disabled={file === '' || title === '' || caption === '' ? true : false}
               variant="contained" fullWidth sx={{ mt: 2 }}
-              onClick={() => onFileSubmit()}
+              onClick={(e) => onFileSubmit(e)}
             >
               {loading ? (
                 <CircularProgress

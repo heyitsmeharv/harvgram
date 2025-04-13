@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useMemo } from "react";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
 import theme from "../styles/themes/theme";
 
-// Create Context
 export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
@@ -13,7 +12,6 @@ const ThemeProvider = ({ children }) => {
     localStorage.setItem("theme", mode);
   }, [mode]);
 
-  // Toggle Between Light & Dark Mode
   const toggleTheme = () => {
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };

@@ -7,13 +7,12 @@ import { captureLambdaHandler } from '@aws-lambda-powertools/tracer/middleware';
 import commonMiddleware from "./libs/commonMiddleware.js";
 import { dynamoDBClient, tracer } from "./libs/client.js";
 
-import createError from "http-errors";
-
-import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
 
 import { uploadPictureToS3 } from './libs/uploadPictureToS3.js';
 import { setPictureUrl } from './libs/setPictureUrl.js';
 
+import { v4 as uuid } from 'uuid';
 
 const logger = new Logger({ serviceName: "create_picture_entry_lambda" });
 tracer.provider.setLogger(logger);
@@ -41,11 +40,12 @@ const createPictureEntry = async (event, context) => {
   const annotations = {
     httpMethod: event?.httpMethod,
     path: event?.path,
-    inputPayload: event.body || null
+    inputPayload: event || null
   }
   logger.info("Lambda execution details", { ...metadata, ...annotations });
 
-  const { title, caption, tag, image } = event.body;
+  const { title, caption, tag, image } = event;
+
   const now = new Date();
 
   const entry = {
@@ -65,31 +65,35 @@ const createPictureEntry = async (event, context) => {
       TableName: process.env.PICTURE_TABLE_NAME,
       Item: entry
     }
-    putItem = await dynamoDBClient.send(new PutItemCommand(params));
+    putItem = await dynamoDBClient.send(new PutCommand(params));
     traceEvents(putItem, params, true);
-  } catch (error) {
-    console.error(error);
-    traceEvents(putItem, params, false, error);
-    throw new createError.InternalServerError(error);
+  } catch (err) {
+    traceEvents(putItem, params, false, err);
+    throw {
+      name: err.name || "InsertDynamoDBError",
+      message: err.message || "Failed to insert into DynamoDB",
+      status: 500,
+    };
   }
 
-  let updatedPicture
+  let pictureUrl;
 
   try {
-    const pictureUrl = await uploadPictureToS3(entry.id + '.jpg', buffer);
-    updatedPicture = await setPictureUrl(entry.id, pictureUrl);
-    console.log(pictureUrl);
-    console.log(updatedPicture);
-  } catch (error) {
-    console.error(error);
-    throw new createError.InternalServerError(error);
+    pictureUrl = await uploadPictureToS3(entry.id + '.jpg', buffer);
+    await setPictureUrl(entry.id, pictureUrl);
+    traceEvents(pictureUrl, entry.id, true);
+  } catch (err) {
+    traceEvents(pictureUrl, entry.id, false, err);
+    throw {
+      name: err.name || "UpdateDynamoDBError",
+      message: err.message || "Failed to update DynamoDB entry",
+      status: 500,
+    };
   }
-
-  const response = { body: JSON.stringify(entry, updatedPicture) }
 
   return {
     statusCode: 201,
-    body: response,
+    body: { entry },
   };
 };
 

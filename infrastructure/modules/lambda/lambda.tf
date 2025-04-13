@@ -67,6 +67,8 @@ resource "aws_lambda_function" "create_picture_entry_lambda" {
   environment {
     variables = {
       PICTURE_TABLE_NAME = var.dynamodb_picture_table
+      S3_BUCKET          = var.bucket_name
+      REGION             = "eu-west-2"
     }
   }
 
@@ -96,19 +98,19 @@ resource "aws_lambda_function" "get_picture_lambda" {
   }
 }
 
-resource "aws_lambda_function" "upload_picture_lambda" {
-  function_name    = "${local.name}_upload_picture"
-  description      = "Lambda to upload pictures"
-  filename         = data.archive_file.upload_picture_lambda.output_path
-  source_code_hash = data.archive_file.upload_picture_lambda.output_base64sha512
+resource "aws_lambda_function" "get_pictures_lambda" {
+  function_name    = "${local.name}_get_pictures"
+  description      = "Lambda to get all pictures"
+  filename         = data.archive_file.get_pictures_lambda.output_path
+  source_code_hash = data.archive_file.get_pictures_lambda.output_base64sha512
   role             = aws_iam_role.lambda_role.arn
-  handler          = "upload_picture.handler"
+  handler          = "get_pictures.handler"
   runtime          = var.lambda_runtime
   timeout          = 30
 
   environment {
     variables = {
-      PICTURES_BUCKET_NAME = var.s3_picture_bucket
+      PICTURE_TABLE_NAME = var.dynamodb_picture_table
     }
   }
 

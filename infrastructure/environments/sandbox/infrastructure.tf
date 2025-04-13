@@ -12,7 +12,7 @@ module "lambda" {
   source = "../../modules/lambda"
 
   lambda_runtime         = var.lambda_runtime
-  s3_picture_bucket      = module.s3.s3_picture_bucket
+  bucket_name            = var.bucket_name
   dynamodb_picture_table = module.dynamodb.dynamodb_picture_table
   ses_to_email_address   = var.ses_to_email_address
   ses_from_email_address = var.ses_from_email_address
