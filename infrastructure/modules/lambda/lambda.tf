@@ -118,3 +118,26 @@ resource "aws_lambda_function" "get_pictures_lambda" {
     mode = "Active"
   }
 }
+
+resource "aws_lambda_function" "delete_picture_entry_lambda" {
+  function_name    = "${local.name}_delete_picture_entry"
+  description      = "Lambda to delete picture entry"
+  filename         = data.archive_file.delete_picture_entry_lambda.output_path
+  source_code_hash = data.archive_file.delete_picture_entry_lambda.output_base64sha512
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "delete_picture_entry.handler"
+  runtime          = var.lambda_runtime
+  timeout          = 30
+
+  environment {
+    variables = {
+      PICTURE_TABLE_NAME = var.dynamodb_picture_table
+      S3_BUCKET          = var.bucket_name
+      REGION             = "eu-west-2"
+    }
+  }
+
+  tracing_config {
+    mode = "Active"
+  }
+}

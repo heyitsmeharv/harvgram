@@ -35,3 +35,9 @@ data "archive_file" "get_pictures_lambda" {
   source_dir  = "${path.module}/../../handlers/get_pictures"
   output_path = "${path.root}/lambda_output/get_pictures.zip"
 }
+
+data "archive_file" "delete_picture_entry_lambda" {
+  type        = "zip"
+  source_dir  = "${path.module}/../../handlers/delete_picture_entry"
+  output_path = "${path.root}/lambda_output/delete_picture_entry.zip"
+}

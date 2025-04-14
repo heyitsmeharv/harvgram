@@ -18,6 +18,7 @@ const request = async (path, options = {}) => {
 export const api = {
   get: (path, options) => request(path, { method: "GET", ...options }),
   post: (path, body, options) => request(path, { method: "POST", body: JSON.stringify(body), ...options }),
+  delete: (path, body, options) => request(path, { method: "DELETE", body: JSON.stringify(body), ...options }),
 };
 
 export const login = async (email, password) => {
@@ -38,4 +39,8 @@ export const uploadImage = async (payload) => {
 
 export const getImages = async () => {
   return await api.get("/pictures", {});
+}
+
+export const deleteImage = async id => {
+  return await api.delete(`/picture/${id}`, {});
 }

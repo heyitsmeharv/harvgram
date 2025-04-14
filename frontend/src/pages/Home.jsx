@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteImage } from "../api/api.js";
 import { usePictures } from "../hooks/usePictures.js";
 import { Box, Button, InputBase, Typography, IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from "@mui/system";
+import hdate from "human-date";
 
 // components
 import LoadingScreen from "../components/LoadingScreen/LoadingScreen.jsx";
@@ -64,7 +68,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const GalleryGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))',
   gap: theme.spacing(2),
   padding: theme.spacing(3),
 }));
@@ -73,11 +77,24 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   overflow: 'hidden',
-  height: '250px',
+  height: '450px',
   boxShadow: theme.shadows[3],
   transition: 'transform 0.3s ease',
   '&:hover img': {
     transform: 'scale(1.05)',
+  },
+}));
+
+const CardWrapper = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '10px',
+  overflow: 'hidden',
+  boxShadow: theme.shadows[3],
+  backgroundColor: theme.palette.background.paper,
+  transition: 'box-shadow 0.3s ease',
+  '&:hover': {
+    boxShadow: theme.shadows[6],
   },
 }));
 
@@ -88,9 +105,47 @@ const GalleryImage = styled('img')({
   transition: 'transform 0.3s ease',
 });
 
+const DetailsBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(4),
+  backgroundColor: theme.palette.background.paper,
+  marginTop: '-8px',
+  borderBottomLeftRadius: '10px',
+  borderBottomRightRadius: '10px',
+}));
+
+const Tags = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: theme.spacing(0.5),
+  marginBottom: theme.spacing(1),
+}));
+
+const Tag = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  color: theme.palette.text.primary,
+  borderRadius: theme.shape.borderRadius,
+  padding: `${theme.spacing(0.25)} ${theme.spacing(1)}`,
+  fontSize: '0.75rem',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+}));
+
+const DeleteButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2),
+  right: theme.spacing(2),
+  backgroundColor: theme.palette.error.main,
+  color: theme.palette.common.white,
+  '&:hover': {
+    backgroundColor: theme.palette.error.dark,
+  },
+  padding: theme.spacing(0.5),
+}));
+
 const Home = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState(null);
   const { data: pictures, isLoading, error: usePicturesError } = usePictures(search);
   const [loading, setLoading] = useState(false);
@@ -136,9 +191,39 @@ const Home = () => {
       </TopBar>
       <GalleryGrid>
         {pictures.map((picture) => (
-          <ImageWrapper key={picture.id}>
-            <GalleryImage src={picture.pictureUrl} alt="Gallery" loading="lazy" />
-          </ImageWrapper>
+          <CardWrapper key={picture.id} position="relative">
+            <ImageWrapper>
+              <GalleryImage src={picture.pictureUrl} alt={picture.title} loading="lazy" />
+            </ImageWrapper>
+            <DetailsBox>
+              <Typography variant="h6" component="h3" fontWeight={600} gutterBottom>
+                {picture.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                {picture.caption}
+              </Typography>
+              {picture.tags && picture.tags.length > 0 && (
+                <Tags>
+                  {picture.tags.map((tag, index) => (
+                    <Tag key={index}>
+                      <Typography variant="caption" component="span">
+                        {tag}
+                      </Typography>
+                    </Tag>
+                  ))}
+                </Tags>
+              )}
+              <Typography variant="caption" color="text.disabled">
+                {hdate.prettyPrint(picture.date)}
+              </Typography>
+              <DeleteButton onClick={() => {
+                queryClient.invalidateQueries(['pictures']);
+                deleteImage(picture.id, picture.pictureUrl)
+              }}>
+                <DeleteIcon fontSize="small" />
+              </DeleteButton>
+            </DetailsBox>
+          </CardWrapper>
         ))}
       </GalleryGrid>
       <UploadOverlay
