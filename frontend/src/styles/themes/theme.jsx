@@ -26,6 +26,7 @@ const theme = (mode) => createTheme({
     },
     text: {
       main: mode === "light" ? "#333" : "#fff",
+      secondary: mode === "light" ? "#fff" : "#000",
     },
   },
   typography: {

@@ -50,7 +50,18 @@ const LoaderOverlay = styled(Box)(({ theme }) => ({
   zIndex: 10,
 }));
 
-
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2),
+  right: theme.spacing(4),
+  backgroundColor: theme.palette.button.main,
+  color: theme.palette.text.main,
+  "&:hover": {
+    backgroundColor: theme.palette.button.highlight,
+    borderColor: theme.palette.button.border,
+    transition: "background-color 0.3s ease",
+  }
+}));
 
 const UploadButton = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.main,
@@ -83,9 +94,9 @@ const StyledText = styled(Typography)(({ theme }) => ({
 export default function UploadOverlay({ open, onClose }) {
   const theme = useTheme();
   const queryClient = useQueryClient();
-  const [imagePreview, setImagePreview] = useState(null);
-  const [file, setFile] = useState();
-  const [base64, setBase64] = useState();
+  const [imagePreview, setImagePreview] = useState("");
+  const [file, setFile] = useState(null);
+  const [base64, setBase64] = useState("");
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [tag, setTag] = useState("#");
@@ -95,18 +106,29 @@ export default function UploadOverlay({ open, onClose }) {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
+  const reset = () => {
+    setFile(null);
+    setBase64("");
+    setImagePreview("")
+    setTitle("");
+    setCaption("");
+    setTag("");
+    setLoading(false);
+  }
+
   const uploadFile = async payload => {
     setLoading(true);
     try {
       await uploadImage(payload);
-      queryClient.invalidateQueries(['pictures']);
+      reset();
       onClose();
+      queryClient.invalidateQueries(['pictures']);
     } catch (err) {
       setMessage(err.message);
     }
   };
 
-  const onFileSubmit = e => {
+  const onFileSubmit = () => {
     const reader = new FileReader();
     reader.onload = handleReaderLoaded;
     reader.readAsBinaryString(file);
@@ -115,7 +137,7 @@ export default function UploadOverlay({ open, onClose }) {
         image: base64,
         title: title,
         caption: caption,
-        tag: tag
+        tag: tag.split(",").map(t => t.trim()),
       }
       setLoading(true);
       setTimeout(() => {
@@ -182,7 +204,7 @@ export default function UploadOverlay({ open, onClose }) {
             <StyledText variant="h5" align="center" fontWeight="bold" fontFamily="Pacifico" gutterBottom>
               Upload
             </StyledText>
-            {imagePreview === null ?
+            {imagePreview === "" ?
               <form onChange={() => onFileChange(file)}>
                 <UploadButton>
                   <CloudUploadIcon fontSize="large" sx={{ mb: 1 }} />
@@ -190,14 +212,14 @@ export default function UploadOverlay({ open, onClose }) {
                 </UploadButton>
               </form>
               :
-              <Grow in={imagePreview !== null}
+              <Grow in={imagePreview !== ""}
                 {...{ timeout: 1000 }}
               >
                 <img src={imagePreview} />
               </Grow>
             }
-            {imagePreview !== null && <IconButton
-              onClick={() => setImagePreview(null)}
+            {imagePreview !== "" && <IconButton
+              onClick={() => reset()}
               sx={{ position: "absolute", top: 8, right: 8 }}
             >
               <CloseIcon />
@@ -228,23 +250,25 @@ export default function UploadOverlay({ open, onClose }) {
               fullWidth
               value={tag}
               onChange={(e) => setTag(e.target.value)}
+              helperText="Separate with commas, e.g. nature, beach, summer"
               margin="normal"
             />
             <StyledText>{prettyDate}</StyledText>
-            <Button
-              disabled={file === '' || title === '' || caption === '' ? true : false}
-              variant="contained" fullWidth sx={{ mt: 2 }}
-              onClick={(e) => onFileSubmit(e)}
-            >
-              {loading ? (
-                <CircularProgress
-                  size={24}
-                  color="inherit"
-                />
-              ) : (
-                "Submit"
-              )}
-            </Button>
+            {file !== null &&
+              <StyledIconButton
+                disabled={file === '' || title === '' || caption === '' ? true : false}
+                onClick={(e) => onFileSubmit(e)}
+              >
+                {loading ? (
+                  <CircularProgress
+                    size={36}
+                    color="inherit"
+                  />
+                ) : (
+                  <CloudUploadIcon fontSize="large" />
+                )}
+              </StyledIconButton>
+            }
           </ContentBox>
         </OverlayContainer>
       )}
