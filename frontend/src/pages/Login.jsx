@@ -30,11 +30,24 @@ const FormWrapper = styled(motion.div)(({ theme }) => ({
 const StyledTextField = styled(TextField)(({ theme }) => ({
   marginBottom: "16px",
   color: theme.palette.text.main,
+  "& .MuiInputLabel-root": {
+    color: theme.palette.text.main,
+  }
 }));
 
 const StyledOutlineInput = styled(OutlinedInput)(({ theme }) => ({
   marginBottom: "16px",
   color: theme.palette.text.main,
+  "& .MuiInputLabel-root": {
+    color: theme.palette.text.main,
+  }
+}));
+
+const StyledInputLabel = styled(InputLabel)(({ theme }) => ({
+  color: theme.palette.text.main,
+  "& .MuiInputLabel-root": {
+    color: theme.palette.text.main,
+  }
 }));
 
 const LoginButton = styled(Button)(({ theme }) => ({
@@ -155,7 +168,7 @@ const Login = () => {
             required
           />
           <FormControl required fullWidth variant="outlined">
-            <InputLabel>Password</InputLabel>
+            <StyledInputLabel>Password</StyledInputLabel>
             <StyledOutlineInput
               label="Password"
               type={showPassword ? 'text' : 'password'}
@@ -163,7 +176,7 @@ const Login = () => {
               disabled={loading}
               onChange={(e) => setPassword(e.target.value)}
               endAdornment={
-                <InputAdornment sx={{ marginRight: "10px" }}  position="end">
+                <InputAdornment sx={{ marginRight: "10px" }} position="end">
                   <IconButton
                     aria-label={
                       showPassword ? 'hide the password' : 'display the password'

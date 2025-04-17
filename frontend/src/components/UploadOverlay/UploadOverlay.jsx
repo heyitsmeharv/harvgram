@@ -4,7 +4,6 @@ import { uploadImage } from "../../api/api.js";
 import {
   Backdrop,
   Box,
-  Button,
   CircularProgress,
   TextField,
   Typography,
@@ -84,6 +83,13 @@ const UploadButton = styled(Box)(({ theme }) => ({
     zIndex: 99999,
     width: "145px",
     height: "145px",
+  }
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  color: theme.palette.text.main,
+  "& .MuiInputLabel-root": {
+    color: theme.palette.text.main,
   }
 }));
 
@@ -225,7 +231,7 @@ export default function UploadOverlay({ open, onClose }) {
               <CloseIcon />
             </IconButton>}
 
-            <TextField
+            <StyledTextField
               name="title"
               label="Title"
               fullWidth
@@ -234,7 +240,7 @@ export default function UploadOverlay({ open, onClose }) {
               margin="normal"
               required
             />
-            <TextField
+            <StyledTextField
               name="caption"
               label="Caption"
               fullWidth
@@ -244,7 +250,7 @@ export default function UploadOverlay({ open, onClose }) {
               margin="normal"
 
             />
-            <TextField
+            <StyledTextField
               name="tag"
               label="Tag"
               fullWidth
