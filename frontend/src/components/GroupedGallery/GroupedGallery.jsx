@@ -52,7 +52,6 @@ const Tags = styled(Box)(({ theme }) => ({
 }));
 
 const Tag = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[200],
   color: theme.palette.text.primary,
   borderRadius: theme.shape.borderRadius,
   fontWeight: 500,

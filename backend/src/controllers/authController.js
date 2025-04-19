@@ -1,4 +1,5 @@
 
+import { jwtDecode } from 'jwt-decode';
 import { initiateLogin, completeChangePassword, refresh } from "../services/authService.js";
 
 export const login = async (req, res) => {
@@ -16,11 +17,17 @@ export const login = async (req, res) => {
     }
 
     const tokens = result.AuthenticationResult;
+    const decoded = jwtDecode(tokens.IdToken);
 
     return res.status(200).json({
       idToken: tokens.IdToken,
       accessToken: tokens.AccessToken,
       refreshToken: tokens.RefreshToken,
+      user: {
+        email: decoded.email,
+        name: decoded.name,
+        sub: decoded.sub,
+      }
     });
   } catch (err) {
     return res.status(err.status || 500).json({

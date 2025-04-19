@@ -36,11 +36,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = ({ queryClient }) => {
+    queryClient.clear();
     setUser(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("user");
-    }
+    localStorage.removeItem("user");
     window.location.href = "/login";
   };
 
@@ -50,15 +49,22 @@ export const AuthProvider = ({ children }) => {
     const interval = setInterval(async () => {
       try {
         const res = await refreshToken(user.refreshToken);
-        login({
+
+        const decoded = parseJwt(res.IdToken);
+
+        const updatedUser = {
+          ...user,
+          email: decoded.email || user.email,
           idToken: res.IdToken,
           accessToken: res.AccessToken,
-          refreshToken: user.refreshToken,
-        });
+        };
+
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
       } catch (err) {
         logout();
       }
-    }, 30 * 60 * 1000);
+    }, 30 * 60 * 1000); // every 30 mins
 
     return () => clearInterval(interval);
   }, [user?.refreshToken]);

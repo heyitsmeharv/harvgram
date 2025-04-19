@@ -11,6 +11,7 @@ import {
   Grow,
   useTheme
 } from "@mui/material";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/system";
 import { motion, AnimatePresence } from "framer-motion";
@@ -123,14 +124,16 @@ export default function UploadOverlay({ open, onClose }) {
   }
 
   const uploadFile = async payload => {
-    setLoading(true);
     try {
+      setLoading(true);
       await uploadImage(payload);
       reset();
       onClose();
       queryClient.invalidateQueries(['pictures']);
     } catch (err) {
       setMessage(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,11 +148,6 @@ export default function UploadOverlay({ open, onClose }) {
         caption: caption,
         tag: tag.split(",").map(t => t.trim()),
       }
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false)
-      }, 2000);
-
       uploadFile(payload);
     }
   };
@@ -213,7 +211,7 @@ export default function UploadOverlay({ open, onClose }) {
             {imagePreview === "" ?
               <form onChange={() => onFileChange(file)}>
                 <UploadButton>
-                  <CloudUploadIcon fontSize="large" sx={{ mb: 1 }} />
+                  <AddPhotoAlternateIcon fontSize="large" sx={{ mb: 1 }} />
                   <input type="file" accept="image/*" onChange={photoUpload} src={imagePreview} />
                 </UploadButton>
               </form>
