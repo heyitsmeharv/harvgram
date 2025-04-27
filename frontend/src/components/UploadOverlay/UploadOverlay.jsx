@@ -64,6 +64,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const UploadButton = styled(Box)(({ theme }) => ({
+  border: `2px dashed ${theme.palette.text.main}`,
   backgroundColor: theme.palette.background.main,
   borderRadius: theme.shape.borderRadius,
   marginBottom: theme.spacing(2),

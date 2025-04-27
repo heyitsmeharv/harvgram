@@ -2,6 +2,7 @@ import { Box, IconButton, InputBase, Menu, MenuItem, Avatar, Tooltip, Typography
 import { styled } from "@mui/system";
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const TopBarContainer = styled(Box)(({ theme }) => ({
   position: "fixed",
@@ -46,7 +47,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const TopBar = ({ onSearch, onLogout, user }) => {
+const TopBar = ({ search, setSearch, onLogout, user }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -64,9 +65,19 @@ const TopBar = ({ onSearch, onLogout, user }) => {
       <SearchBox>
         <SearchIcon color="action" />
         <StyledInput
-          placeholder="Search by title, tag..."
-          onChange={(e) => onSearch?.(e.target.value)}
+          placeholder="Search by title, caption, or tag..."
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
         />
+        {search !== "" && (
+          <IconButton
+            size="small"
+            onClick={() => setSearch("")}
+            sx={{ ml: 1 }}
+          >
+            <ClearIcon fontSize="small" />
+          </IconButton>
+        )}
       </SearchBox>
 
       <Box>

@@ -38,6 +38,7 @@ const theme = (mode) => createTheme({
   },
   shape: {
     borderRadius: 10,
+    borderRadiusTag: 3,
   },
   shadows: [
     "none",
