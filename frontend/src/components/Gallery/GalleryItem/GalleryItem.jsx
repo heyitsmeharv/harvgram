@@ -8,13 +8,13 @@ import hdate from "human-date";
 const MotionBox = motion(Box);
 
 const CardWrapper = styled(MotionBox)(({ theme }) => ({
+  position: 'relative',
+  overflow: 'visible',
+  borderRadius: '10px',
   display: 'flex',
   flexDirection: 'column',
-  position: 'relative',
-  borderRadius: '10px',
-  overflow: 'visible',
   boxShadow: theme.shadows[3],
-  transition: "box-shadow 0.3s ease",
+  transition: 'box-shadow 0.3s ease',
   maxWidth: "450px",
   minWidth: "450px",
   maxHeight: "666px",
@@ -28,19 +28,31 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   overflow: 'hidden',
   height: '450px',
-  width: '100%',
   boxShadow: theme.shadows[3],
-  cursor: "pointer",
+  transition: 'transform 0.3s ease',
+
+  '&:hover img': {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) scale(1.1)',
+    width: '80vw',
+    height: 'auto',
+    maxHeight: '80vh',
+    objectFit: 'contain',
+    zIndex: 2000,
+    borderRadius: '12px',
+    boxShadow: theme.shadows[12],
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 const GalleryImage = styled(motion.img)({
-  width: '100%',
+   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  borderRadius: '10px',
+  transition: 'all 0.5s ease',
+  position: 'relative',
   zIndex: 1,
 });
 
@@ -125,15 +137,6 @@ const GalleryItem = ({ picture, deletingId, deleteImage, queryClient, setDeletin
           alt={picture.title}
           style={{ opacity: deletingId === picture.id ? 0.3 : 1 }}
           loading="lazy"
-          initial={{ scale: 1 }}
-          whileHover={{
-            scale: 2.5,
-            top: "50%",
-            left: "50%",
-            x: "-50%",
-            y: "-50%",
-            transition: { duration: 0.5, ease: "easeInOut" }
-          }}
         />
         {deletingId === picture.id && (
           <LoadingBox>
