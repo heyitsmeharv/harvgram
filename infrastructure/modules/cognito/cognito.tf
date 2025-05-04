@@ -33,8 +33,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
 
   generate_secret                      = false
   prevent_user_existence_errors        = "ENABLED"
-  callback_urls                        = ["https://auth.harvgram.co.uk"]
-  logout_urls                          = ["https://auth.harvgram.co.uk/logout"]
+  callback_urls                        = ["https://harvgram.co.uk"]
+  logout_urls                          = ["https://harvgram.co.uk/logout"]
   allowed_oauth_flows                  = ["code", "implicit"]
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
   allowed_oauth_flows_user_pool_client = true

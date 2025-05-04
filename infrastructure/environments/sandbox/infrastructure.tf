@@ -24,9 +24,45 @@ module "cognito" {
   source = "../../modules/cognito"
 }
 
-# module "api_gateway" {
-#   source = "../../modules/api_gateway"
+module "network" {
+  source = "../../modules/network"
 
-#   lambda_arns           = module.lambda.lambda_arns
-#   cognito_user_pool_arn = module.cognito.cognito_user_pool_arn
-# }
+  providers = {
+    aws.virginia = aws.virginia
+  }
+
+}
+
+module "cloudfront" {
+  source              = "../../modules/cloudfront"
+  domain_name         = var.frontend_url
+  alb_dns_name        = module.network.alb_dns_name
+  alb_zone_id         = module.network.alb_zone_id
+  acm_certificate_arn = module.network.acm_certificate_arn
+}
+
+module "route53" {
+  source             = "../../modules/route53"
+  root_domain        = var.root_domain
+  subdomain          = "www"
+  target_domain_name = module.cloudfront.cloudfront_distribution_domain
+  target_zone_id     = module.cloudfront.cloudfront_distribution_hosted_zone_id
+}
+
+module "ecs" {
+  source                = "../../modules/ecs"
+  vpc_id                = module.network.vpc_id
+  public_subnet_ids     = module.network.public_subnet_ids
+  private_subnet_ids    = module.network.private_subnet_ids
+  frontend_subnet_cidrs = module.network.frontend_subnet_cidrs
+  alb_listener_arn      = module.network.alb_arn
+  alb_sg_id             = module.network.alb_sg_id
+  alb_tg_frontend_arn   = module.network.alb_tg_frontend_arn
+  alb_tg_backend_arn    = module.network.alb_tg_backend_arn
+  frontend_image_url    = module.ecr.frontend_image_url
+  backend_image_url     = module.ecr.backend_image_url
+}
+
+module "ecr" {
+  source = "../../modules/ecr"
+}

@@ -36,8 +36,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = ({ queryClient }) => {
-    queryClient.clear();
+  const logout = (queryClient) => {
+    queryClient?.clear();
     setUser(null);
     localStorage.removeItem("user");
     window.location.href = "/login";

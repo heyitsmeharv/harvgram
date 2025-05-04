@@ -1,6 +1,7 @@
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Box, IconButton, InputBase, Menu, MenuItem, Avatar, Tooltip, Typography, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
-import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -49,6 +50,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
 
 const TopBar = ({ search, setSearch, onLogout, user }) => {
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);

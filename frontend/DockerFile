@@ -1,21 +1,23 @@
-# Build Stage
-FROM node:18 AS build
-WORKDIR /app
+# --- dev stage: vite dev server ---
+  FROM node:20 AS dev
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install
-
-# Copy the app files and build the frontend
-COPY . .
-RUN npm run build
-
-# Serve with Nginx
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose Nginx port
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+  WORKDIR /app
+  COPY package*.json ./
+  RUN npm ci
+  COPY . .
+  EXPOSE 3000
+  CMD ["npm", "run", "dev", "--", "--host", "--port", "3000"]
+  
+  # --- build stage ---
+  FROM node:20 AS builder
+  WORKDIR /app
+  COPY --from=dev /app /app
+  RUN npm run build
+  
+  # --- prod stage: serve dist ---
+  FROM node:20-alpine AS prod
+  WORKDIR /app
+  RUN npm install -g serve
+  COPY --from=builder /app/dist ./dist
+  EXPOSE 3000
+  CMD ["serve", "-s", "dist", "-l", "3000"]

@@ -1,7 +1,59 @@
-output "lambda_arns" {
-value = {
-    sign_up              = "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/${aws_lambda_function.sign_up_lambda.arn}/invocations"
-    get_picture          = "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/${aws_lambda_function.get_picture_lambda.arn}/invocations"
-    create_picture_entry = "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/${aws_lambda_function.create_picture_entry_lambda.arn}/invocations"
-  }
+output "vpc_id" {
+  value = aws_vpc.main.id
+}
+
+output "public_subnet_ids" {
+  value = [
+    aws_subnet.public_a.id,
+    aws_subnet.public_b.id,
+    aws_subnet.public_c.id
+  ]
+}
+
+output "private_subnet_ids" {
+  value = [
+    aws_subnet.private_a.id,
+    aws_subnet.private_b.id,
+    aws_subnet.private_c.id
+  ]
+}
+
+output "frontend_subnet_cidrs" {
+  value = [
+    aws_subnet.public_a.cidr_block,
+    aws_subnet.public_b.cidr_block,
+    aws_subnet.public_b.cidr_block
+  ]
+}
+
+output "alb_dns_name" {
+  value = aws_lb.harvgram.dns_name
+}
+
+output "alb_zone_id" {
+  value = aws_lb.harvgram.zone_id
+}
+
+output "alb_arn" {
+  value = aws_lb.harvgram.arn
+}
+
+output "alb_listener_arn" {
+  value = aws_lb_listener.http.arn
+}
+
+output "alb_sg_id" {
+  value = aws_security_group.alb_sg.id
+}
+
+output "alb_tg_frontend_arn" {
+  value = aws_lb_target_group.frontend.arn
+}
+
+output "alb_tg_backend_arn" {
+  value = aws_lb_target_group.backend.arn
+}
+
+output "acm_certificate_arn" {
+  value = data.aws_acm_certificate.auth_cert.arn
 }

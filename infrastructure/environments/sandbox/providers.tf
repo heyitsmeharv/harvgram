@@ -1,4 +1,14 @@
 provider "aws" {
+  alias  = "london"
+  region = "eu-west-2"
+}
+
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
+}
+
+provider "aws" {
   profile = "assume-role-sandbox"
   default_tags {
     tags = {

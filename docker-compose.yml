@@ -1,25 +1,35 @@
-version: "3.8"
 services:
   backend:
     build: ./backend
     container_name: backend
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - AWS_REGION=eu-west-2
     ports:
-      - "5000:5000"
+      - "5002:5002"
     env_file:
-      - ./backend/.env
+      - ./backend/.env.${ENVIRONMENT}
     volumes:
       - ./backend:/app
-    depends_on:
-      - frontend
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      target: ${ENVIRONMENT:-dev}
     container_name: frontend
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - AWS_REGION=eu-west-2
     ports:
-      - "3000:80"
+      - "5173:3000"
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.${ENVIRONMENT}
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend

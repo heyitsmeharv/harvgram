@@ -27,3 +27,8 @@ variable "frontend_url" {
   description = "url for frontend application"
   type        = string
 }
+
+variable "root_domain" {
+  description = "domain for the application"
+  type        = string
+}
