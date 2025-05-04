@@ -50,7 +50,7 @@ jobs:
   upload-frontend:
     name: Upload Frontend to S3
     runs-on: ubuntu-latest
-    needs: terraform
+    needs: terraform-plan
     steps:
       - uses: actions/checkout@v3
 
@@ -95,7 +95,7 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
-    needs: setup-aws
+    needs: docker
     steps:
       - uses: actions/checkout@v3
 
