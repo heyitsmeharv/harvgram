@@ -42,7 +42,7 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform -chdir=infrastructure/environments/sandbox init
 
       - name: Terraform Plan
         run: terraform -chdir=infrastructure/environments/sandbox plan -var-file=env.tfvars
@@ -105,7 +105,7 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform -chdir=infrastructure/environments/sandbox init
 
       - name: Terraform Apply
         run: terraform -chdir=infrastructure/environments/sandbox apply -var-file=env.tfvars -auto-approve
