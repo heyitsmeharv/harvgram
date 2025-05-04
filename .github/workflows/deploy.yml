@@ -45,7 +45,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform  plan -var-file=env.tfvars
+        run: terraform -chdir=infrastructure/environments/sandbox plan -var-file=env.tfvars
 
   upload-frontend:
     name: Upload Frontend to S3
@@ -108,4 +108,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform  apply -var-file=env.tfvars -auto-approve
+        run: terraform -chdir=infrastructure/environments/sandbox apply -var-file=env.tfvars -auto-approve
