@@ -26,8 +26,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: $GITHUBOIDCROLE
-          aws-region: $AWS_REGION
+          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          aws-region: ${{ env.AWS_REGION }}
 
   terraform-plan:
     name: Terraform Plan
@@ -62,12 +62,12 @@ jobs:
 
       - name: Sync to S3
         run: |
-          aws s3 sync frontend/dist $S3_BUCKET --delete
+          aws s3 sync frontend/dist ${{ env.S3_BUCKET }} --delete
 
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
 
   docker:
@@ -82,15 +82,15 @@ jobs:
 
       - name: Build & Push Backend Image
         run: |
-          docker build -t $ECR_REPO_BACKEND:latest ./backend
-          docker tag $ECR_REPO_BACKEND:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPO_BACKEND:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPO_BACKEND:latest
+          docker build -t ${{ env.ECR_REPO_BACKEND }}:latest ./backend
+          docker tag ${{ env.ECR_REPO_BACKEND }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_BACKEND }}:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_BACKEND }}:latest
 
       - name: Build & Push Frontend Image
         run: |
-          docker build -t $ECR_REPO_FRONTEND:latest ./frontend
-          docker tag $ECR_REPO_FRONTEND:latest ${{ steps.login-ecr.outputs.registry }}/$ECR_REPO_FRONTEND:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPO_FRONTEND:latest
+          docker build -t ${{ env.ECR_REPO_FRONTEND }}:latest ./frontend
+          docker tag ${{ env.ECR_REPO_FRONTEND }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:latest
 
   terraform-apply:
     name: Terraform Apply
