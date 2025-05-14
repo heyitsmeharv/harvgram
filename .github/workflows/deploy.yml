@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   terraform-plan:
-    name: Authenticate via AWS OIDC
+    name: Terraform Plan
     runs-on: ubuntu-latest
     outputs:
       role-session-name: github-actions-${{ github.run_id }}
@@ -28,6 +28,9 @@ jobs:
         with:
           role-to-assume: ${{ env.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify AWS caller identity
+        run: aws sts get-caller-identity
 
       - uses: actions/checkout@v3
 
@@ -52,6 +55,9 @@ jobs:
         with:
           role-to-assume: ${{ env.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify AWS caller identity
+        run: aws sts get-caller-identity
 
       - uses: actions/checkout@v3
 
