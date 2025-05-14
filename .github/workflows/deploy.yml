@@ -93,6 +93,12 @@ jobs:
 
       - name: List root directory contents
         run: ls -al .
+  
+      - name: List backend directory contents
+        run: ls -al ./backend
+         
+      - name: List frontend directory contents
+        run: ls -al ./frontend
 
       - name: Log in to ECR
         id: login-ecr
