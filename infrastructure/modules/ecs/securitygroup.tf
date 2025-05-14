@@ -1,7 +1,7 @@
 resource "aws_security_group" "frontend_sg" {
   name        = "harvgram-frontend-sg"
   description = "Frontend ECS SG"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "frontend-sg"
@@ -11,7 +11,7 @@ resource "aws_security_group" "frontend_sg" {
 resource "aws_security_group" "backend_sg" {
   name        = "harvgram-backend-sg"
   description = "Backend ECS SG"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "backend-sg"
