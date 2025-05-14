@@ -21,7 +21,6 @@ jobs:
   upload-frontend:
     name: Upload Frontend to S3
     runs-on: ubuntu-latest
-    needs: terraform-plan
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -88,6 +87,7 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+    needs: docker 
     outputs:
       role-session-name: github-actions-${{ github.run_id }}
     steps:
@@ -121,7 +121,7 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
-    needs: docker
+    needs: terraform-plan
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
