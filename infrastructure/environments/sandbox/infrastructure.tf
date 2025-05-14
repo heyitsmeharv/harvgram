@@ -31,6 +31,11 @@ module "network" {
     aws.virginia = aws.virginia
   }
 
+  security_groups = [
+    module.ecs.frontend_sg_id,
+    module.ecs.backend_sg_id
+  ]
+
 }
 
 module "cloudfront" {
