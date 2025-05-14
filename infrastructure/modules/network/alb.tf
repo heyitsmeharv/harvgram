@@ -37,7 +37,7 @@ resource "aws_lb_target_group" "frontend" {
 }
 
 resource "aws_lb_target_group" "backend" {
-  name        = "frontend-tg"
+  name        = "backend-tg"
   port        = 5002
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
