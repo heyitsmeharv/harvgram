@@ -209,6 +209,29 @@ jobs:
       runs-on: ubuntu-latest
       needs: terraform-apply
       steps:
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{ env.GITHUBOIDCROLE }}
+            aws-region: ${{ env.AWS_REGION }}
+
+        - name: Install jq
+          run: sudo apt-get install -y jq
+
+        - name: Assume role
+          id: assume-role
+          shell: bash
+          run: |
+            CREDS=$(aws sts assume-role \
+              --role-arn "${{ env.SANDBOX_ROLE }}" \
+              --role-session-name GitHubSession \
+              --output json)
+
+            echo "AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')" >> $GITHUB_ENV
+            echo "AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')" >> $GITHUB_ENV
+
         - name: Force ECS Deployment Frontend
           run: |
             aws ecs update-service \
