@@ -18,71 +18,6 @@ permissions:
   contents: read
 
 jobs:
-  terraform-plan:
-    name: Terraform Plan
-    runs-on: ubuntu-latest
-    outputs:
-      role-session-name: github-actions-${{ github.run_id }}
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Assume role
-        id: assume-role
-        run: |
-          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
-
-      - name: Verify AWS caller identity
-        run: aws sts get-caller-identity
-
-      - uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.7.3
-
-      - name: Terraform Init
-        run: terraform -chdir=infrastructure/environments/sandbox init
-
-      - name: Terraform Plan
-        run: terraform -chdir=infrastructure/environments/sandbox plan -var-file=env.tfvars
-
-  terraform-apply:
-    name: Terraform Apply
-    runs-on: ubuntu-latest
-    needs: docker
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Assume role
-        id: assume-role
-        run: |
-          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
-
-      - name: Verify AWS caller identity
-        run: aws sts get-caller-identity
-
-      - uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.7.3
-
-      - name: Terraform Init
-        run: terraform -chdir=infrastructure/environments/sandbox init
-
-      - name: Terraform Apply
-        run: terraform -chdir=infrastructure/environments/sandbox apply -var-file=env.tfvars -auto-approve
-
   upload-frontend:
     name: Upload Frontend to S3
     runs-on: ubuntu-latest
@@ -149,3 +84,68 @@ jobs:
           docker build -t ${{ env.ECR_REPO_FRONTEND }}:latest ./frontend
           docker tag ${{ env.ECR_REPO_FRONTEND }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:latest
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:latest
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    outputs:
+      role-session-name: github-actions-${{ github.run_id }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Assume role
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
+
+      - name: Verify AWS caller identity
+        run: aws sts get-caller-identity
+
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.3
+
+      - name: Terraform Init
+        run: terraform -chdir=infrastructure/environments/sandbox init
+
+      - name: Terraform Plan
+        run: terraform -chdir=infrastructure/environments/sandbox plan -var-file=env.tfvars
+
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Assume role
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
+
+      - name: Verify AWS caller identity
+        run: aws sts get-caller-identity
+
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.3
+
+      - name: Terraform Init
+        run: terraform -chdir=infrastructure/environments/sandbox init
+
+      - name: Terraform Apply
+        run: terraform -chdir=infrastructure/environments/sandbox apply -var-file=env.tfvars -auto-approve
