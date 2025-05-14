@@ -27,8 +27,8 @@ resource "aws_security_group" "vpc_endpoints" {
     to_port     = 443
     protocol    = "tcp"
     security_groups = [
-      var.aws_security_group.frontend_sg.id,
-      var.aws_security_group.backend_sg.id
+      var.security_groups[0],
+      var.security_groups[1],
     ]
   }
 
