@@ -8,6 +8,16 @@ resource "aws_iam_role_policy" "ecs_role_policy" {
   policy = data.template_file.role_policy_ecs.rendered
 }
 
+resource "aws_cloudwatch_log_group" "ecs_frontend" {
+  name              = "/ecs/harvgram-frontend"
+  retention_in_days = 7
+}
+
+resource "aws_cloudwatch_log_group" "ecs_backend" {
+  name              = "/ecs/harvgram-backend"
+  retention_in_days = 7
+}
+
 resource "aws_ecs_task_definition" "frontend" {
   family                   = "harvgram-frontend"
   requires_compatibilities = ["FARGATE"]
@@ -27,7 +37,15 @@ resource "aws_ecs_task_definition" "frontend" {
           hostPort      = 3000
           protocol      = "tcp"
         }
-      ]
+      ],
+      log_configuration = {
+        log_driver = "awslogs"
+        options = {
+          awslogs-region        = "eu-west-2"
+          awslogs-group         = "/ecs/harvgram-frontend"
+          awslogs-stream-prefix = "frontend"
+        }
+      }
     }
   ])
 }
@@ -51,7 +69,15 @@ resource "aws_ecs_task_definition" "backend" {
           hostPort      = 5002
           protocol      = "tcp"
         }
-      ]
+      ],
+      log_configuration = {
+        log_driver = "awslogs"
+        options = {
+          awslogs-region        = "eu-west-2"
+          awslogs-group         = "/ecs/harvgram-backend"
+          awslogs-stream-prefix = "backend"
+        }
+      }
     }
   ])
 }

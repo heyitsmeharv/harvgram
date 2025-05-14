@@ -16,6 +16,8 @@
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
         "logs:PutLogEvents",
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords",
         "s3:PutObject",
         "s3:GetObject",
         "s3:PutObjectAcl",
