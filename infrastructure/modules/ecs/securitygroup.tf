@@ -3,18 +3,18 @@ resource "aws_security_group" "backend_sg" {
   description = "Allow traffic only from frontend ECS"
   vpc_id      = var.vpc_id
 
-  ingress {
-    from_port   = 5002
-    to_port     = 5002
-    protocol    = "tcp"
-    cidr_blocks = var.frontend_subnet_cidrs  
+   ingress {
+    from_port       = 5002
+    to_port         = 5002
+    protocol        = "tcp"
+    security_groups = [aws_security_group.frontend_sg.id]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
