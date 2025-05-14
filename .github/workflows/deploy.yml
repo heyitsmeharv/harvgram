@@ -31,10 +31,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.SANDBOX_ROLE }}
-          aws-region: eu-west-2
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
 
       - name: Verify AWS caller identity
         run: aws sts get-caller-identity
@@ -64,10 +63,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.SANDBOX_ROLE }}
-          aws-region: eu-west-2
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
 
       - name: Verify AWS caller identity
         run: aws sts get-caller-identity
@@ -95,6 +93,11 @@ jobs:
         with:
           role-to-assume: ${{ env.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Assume role
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
 
       - uses: actions/checkout@v3
 
@@ -124,6 +127,11 @@ jobs:
         with:
           role-to-assume: ${{ env.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Assume role
+        id: assume-role
+        run: |
+          aws sts assume-role --role-arn ${{ env.SANDBOX_ROLE}} --role-session-name GitHubSession
 
       - uses: actions/checkout@v3
 
