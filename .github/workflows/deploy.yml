@@ -203,3 +203,24 @@ jobs:
 
       - name: Terraform Apply
         run: terraform -chdir=infrastructure/environments/sandbox apply -var-file=env.tfvars -auto-approve
+
+  force-ecs-deployment:
+      name: Force ECS Deployment
+      runs-on: ubuntu-latest
+      needs: terraform-apply
+      steps:
+        - name: Force ECS Deployment Frontend
+          run: |
+            aws ecs update-service \
+              --cluster harvgram-cluster \
+              --service backend-service \
+              --force-new-deployment \
+              --region eu-west-2 
+
+        - name: Force ECS Deployment Backend
+          run: |
+            aws ecs update-service \
+              --cluster harvgram-cluster \
+              --service frontend-service \
+              --force-new-deployment \
+              --region eu-west-2 
