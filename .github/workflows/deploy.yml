@@ -11,7 +11,6 @@ env:
   S3_BUCKET: ${{ secrets.S3_BUCKET }}
   CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   GITHUBOIDCROLE: ${{ secrets.GITHUBOIDCROLE}}
-  TF_ENV_TFVARS: ${{ secrets.TF_ENV_TFVARS }}
 
 permissions:
   id-token: write
@@ -37,9 +36,6 @@ jobs:
         with:
           terraform_version: 1.7.3
 
-      - name: Write env.tfvars file from secret
-        run: echo "${{ env.TF_ENV_TFVARS }}" > infrastructure/environments/sandbox/env.tfvars
-
       - name: Terraform Init
         run: terraform -chdir=infrastructure/environments/sandbox init
 
@@ -63,9 +59,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.7.3
-      
-      - name: Write env.tfvars file from secret
-        run: echo "${{ env.TF_ENV_TFVARS }}" > infrastructure/environments/sandbox/env.tfvars
 
       - name: Terraform Init
         run: terraform -chdir=infrastructure/environments/sandbox init

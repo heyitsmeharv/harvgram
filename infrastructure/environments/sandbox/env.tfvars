@@ -1,0 +1,7 @@
+role_arn               = "arn:aws:iam::039612873345:role/AssumeSandboxAccount"
+bucket_name            = "harvgram"
+lambda_runtime         = "nodejs20.x"
+ses_to_email_address   = "heyitsmeharv@gmail.com"
+ses_from_email_address = "adamharveysandbox@gmail.com"
+frontend_url           = "www.harvgram.co.uk"
+root_domain            = "harvgram.co.uk"
