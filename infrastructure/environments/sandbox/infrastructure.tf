@@ -31,6 +31,7 @@ module "network" {
     aws.virginia = aws.virginia
   }
 
+  private_subnet_ids    = module.network.private_subnet_ids
   security_groups = [
     module.ecs.frontend_sg_id,
     module.ecs.backend_sg_id

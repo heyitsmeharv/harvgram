@@ -7,106 +7,42 @@ resource "aws_vpc" "main" {
   }
 }
 
+resource "aws_eip" "nat" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_a.id
+  tags = {
+    Name = "harvgram-nat"
+  }
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
+  tags = {
+    Name = "private-route-table"
+  }
+}
+
+resource "aws_route_table_association" "private_subnets" {
+  for_each = toset(var.private_subnet_ids)
+
+  subnet_id      = each.value
+  route_table_id = aws_route_table.private.id
+}
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "harvgram-igw"
-  }
-}
-
-
-resource "aws_security_group" "vpc_endpoints" {
-  name        = "vpc-endpoints-sg"
-  description = "Allow HTTPS from ECS tasks to interface endpoints"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description = "Allow HTTPS from frontend and backend ECS tasks"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    security_groups = var.security_groups    
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "vpc-endpoints-sg"
-  }
-}
-
-resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id              = aws_vpc.main.id
-  service_name        = "com.amazonaws.eu-west-2.ecr.api"
-  vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.private_a.id, aws_subnet.private_b.id, aws_subnet.private_c.id]
-  security_group_ids  = [aws_security_group.vpc_endpoints.id]
-  private_dns_enabled = true
-
-  tags = {
-    Name = "ecr-api-endpoint"
-  }
-}
-
-resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id              = aws_vpc.main.id
-  service_name        = "com.amazonaws.eu-west-2.ecr.dkr"
-  vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.private_a.id, aws_subnet.private_b.id, aws_subnet.private_c.id]
-  security_group_ids  = [aws_security_group.vpc_endpoints.id]
-  private_dns_enabled = true
-
-  tags = {
-    Name = "ecr-dkr-endpoint"
-  }
-}
-
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = aws_vpc.main.id
-  service_name = "com.amazonaws.eu-west-2.s3"
-  route_table_ids = [
-    aws_route_table.private.id
-  ]
-  vpc_endpoint_type = "Gateway"
-
-  tags = {
-    Name = "s3-endpoint"
-  }
-}
-
-resource "aws_network_acl" "private" {
-  vpc_id = aws_vpc.main.id
-  subnet_ids = [
-    aws_subnet.private_a.id,
-    aws_subnet.private_b.id,
-    aws_subnet.private_c.id
-  ]
-
-  ingress {
-    protocol   = "-1"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
-  }
-
-  egress {
-    protocol   = "-1"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
-  }
-
-  tags = {
-    Name = "private-subnet-nacl"
   }
 }
