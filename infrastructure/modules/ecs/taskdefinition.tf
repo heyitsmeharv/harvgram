@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "frontend" {
         log_driver = "awslogs"
         options = {
           awslogs-region        = "eu-west-2"
-          awslogs-group         = "/ecs/harvgram-frontend"
+          awslogs-group         = aws_cloudwatch_log_group.ecs_frontend.name
           awslogs-stream-prefix = "frontend"
         }
       }
@@ -74,7 +74,7 @@ resource "aws_ecs_task_definition" "backend" {
         log_driver = "awslogs"
         options = {
           awslogs-region        = "eu-west-2"
-          awslogs-group         = "/ecs/harvgram-backend"
+          awslogs-group         = aws_cloudwatch_log_group.ecs_backend.name
           awslogs-stream-prefix = "backend"
         }
       }
