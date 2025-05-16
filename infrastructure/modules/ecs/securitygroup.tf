@@ -27,6 +27,16 @@ resource "aws_security_group_rule" "alb_to_frontend" {
   source_security_group_id = var.alb_sg_id
 }
 
+# ALB → Backend
+resource "aws_security_group_rule" "alb_to_backend" {
+  type                     = "ingress"
+  from_port                = 5002
+  to_port                  = 5002
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.backend_sg.id
+  source_security_group_id = var.alb_sg_id
+}
+
 # Frontend → Backend
 resource "aws_security_group_rule" "frontend_to_backend" {
   type                     = "egress"
