@@ -29,6 +29,7 @@ module "network" {
 
   providers = {
     aws.virginia = aws.virginia
+    aws.london   = aws.london
   }
 
   private_subnet_ids    = module.network.private_subnet_ids
