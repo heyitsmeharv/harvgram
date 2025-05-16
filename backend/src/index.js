@@ -17,6 +17,8 @@ app.use(cors({ origin: ["http://localhost:5173", "https://harvgram.co.uk"], meth
 app.use("/api", authRoutes);
 app.use("/api", pictureRoutes);
 
+app.get("/health", (req, res) => res.sendStatus(200));
+
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
