@@ -42,6 +42,30 @@ resource "aws_cloudfront_distribution" "frontend" {
     }
   }
 
+  custom_error_response {
+    error_code         = 500
+    response_code      = 200
+    response_page_path = "/error.html"
+  }
+
+  custom_error_response {
+    error_code         = 502
+    response_code      = 200
+    response_page_path = "/error.html"
+  }
+
+  custom_error_response {
+    error_code         = 503
+    response_code      = 200
+    response_page_path = "/error.html"
+  }
+
+  custom_error_response {
+    error_code         = 504
+    response_code      = 200
+    response_page_path = "/error.html"
+  }
+
   tags = {
     Name = "harvgram-cloudfront"
   }
