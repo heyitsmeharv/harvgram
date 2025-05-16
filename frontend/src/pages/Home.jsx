@@ -93,7 +93,7 @@ const Home = () => {
     >
       <TopBar search={search} setSearch={setSearch} onLogout={handleLogout} user={user} />
       <GalleryGrid>
-        <GroupedGallery pictures={pictures} filterPictures={filterPictures} search={search} queryClient={queryClient} deleteImage={deleteImage} deletingId={deletingId} setDeletingId={setDeletingId} />
+        <GroupedGallery pictures={pictures ? pictures : []} filterPictures={filterPictures} search={search} queryClient={queryClient} deleteImage={deleteImage} deletingId={deletingId} setDeletingId={setDeletingId} />
       </GalleryGrid>
       <UploadOverlay
         open={showOverlay}

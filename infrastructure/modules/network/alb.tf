@@ -2,7 +2,7 @@ resource "aws_lb" "harvgram" {
   name               = "harvgram-alb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [
+  subnets = [
     aws_subnet.public_a.id,
     aws_subnet.public_b.id,
     aws_subnet.public_c.id
@@ -81,7 +81,7 @@ resource "aws_lb_listener_rule" "backend_api_route" {
 
   condition {
     path_pattern {
-      values = ["/auth/*"]
+      values = ["/api/*"]
     }
   }
 }

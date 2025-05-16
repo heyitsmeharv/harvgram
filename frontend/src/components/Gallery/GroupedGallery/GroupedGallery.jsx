@@ -9,7 +9,7 @@ const GroupedGallery = ({ pictures, filterPictures, search, deleteImage, queryCl
   const theme = useTheme();
 
   const groupByMonth = (items) => {
-    return items.reduce((acc, picture) => {
+    return items?.reduce((acc, picture) => {
       const key = format(new Date(picture.createdAt), "yyyy/MM");
       if (!acc[key]) acc[key] = [];
       acc[key].push(picture);
@@ -17,11 +17,11 @@ const GroupedGallery = ({ pictures, filterPictures, search, deleteImage, queryCl
     }, {});
   };
 
-  const grouped = groupByMonth(filterPictures.length ? filterPictures : pictures);
+  const grouped = groupByMonth(filterPictures?.length ? filterPictures : pictures);
 
   return (
     <Box sx={{ px: 2 }}>
-      {pictures.length === 0 && search !== "" ? (
+      {pictures?.length === 0 && search !== "" ? (
         <Box
           sx={{
             minHeight: "50vh",
