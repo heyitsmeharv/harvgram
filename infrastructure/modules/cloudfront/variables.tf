@@ -1,4 +1,5 @@
 variable "domain_name" {
+  default = "www.harvgram.co.uk"
   description = "custom domain for CloudFront"
   type        = string
 }

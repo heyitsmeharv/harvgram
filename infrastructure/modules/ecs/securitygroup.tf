@@ -60,18 +60,18 @@ resource "aws_security_group_rule" "backend_from_frontend" {
 # ECR
 resource "aws_security_group_rule" "frontend_to_internet" {
   type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.frontend_sg.id
 }
 
 resource "aws_security_group_rule" "backend_to_internet" {
   type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.backend_sg.id
 }
