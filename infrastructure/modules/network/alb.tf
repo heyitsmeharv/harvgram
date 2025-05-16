@@ -70,6 +70,22 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+resource "aws_lb_listener_rule" "backend_api_route" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/auth/*"]
+    }
+  }
+}
+
 resource "aws_security_group" "alb_sg" {
   name        = "harvgram-alb-sg"
   description = "Allow HTTP inbound traffic"
