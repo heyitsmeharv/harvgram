@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start:docker": "docker-compose --env-file .env up --build harvgram-frontend",
+    "start:docker": "docker-compose --env-file .env.development up --build harvgram-frontend",
     "start:docker:prod": "docker-compose --env-file .env.production up --build harvgram-frontend",
     "stop:docker": "docker-compose down"
   },

@@ -7,7 +7,7 @@ import {
 
 import dotenv from "dotenv";
 
-dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env" });
+dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development" });
 
 const client = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
 

@@ -2,7 +2,7 @@ import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 
 import dotenv from "dotenv";
 
-dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env" });
+dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development" });
 
 const client = new LambdaClient({ region: process.env.AWS_REGION });
 

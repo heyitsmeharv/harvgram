@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/ApiError";
 
-const BASE_URL = import.meta.env.VITE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const request = async (path, options = {}) => {
   const res = await fetch(`${BASE_URL}${path}`, {
