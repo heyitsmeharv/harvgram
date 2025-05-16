@@ -16,7 +16,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "alb-origin"
     viewer_protocol_policy = "redirect-to-https"
