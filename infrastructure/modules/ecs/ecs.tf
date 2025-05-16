@@ -36,4 +36,10 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [aws_security_group.backend_sg.id]
     assign_public_ip = false
   }
+
+  load_balancer {
+    target_group_arn = var.alb_tg_backend_arn
+    container_name   = "backend"
+    container_port   = 5002
+  }
 }
