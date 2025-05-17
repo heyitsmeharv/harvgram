@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   aliases             = [var.domain_name]
 
   origin {
-    domain_name = var.domain_name
+    domain_name = var.alb_dns_name  
     origin_id   = "alb-origin"
 
     custom_origin_config {
