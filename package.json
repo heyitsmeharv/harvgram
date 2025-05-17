@@ -5,12 +5,12 @@
     "start": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",
     "start:docker": "docker-compose up --build",
-    "start:docker:dev": "cross-env ENVIRONMENT=dev docker-compose up --build",
-    "start:docker:prod": "cross-env ENVIRONMENT=prod docker-compose up --build",
+    "start:docker:dev": "cross-env ENVIRONMENT=development docker-compose up --build",
+    "start:docker:prod": "cross-env ENVIRONMENT=production docker-compose up --build",
     "stop:docker": "docker-compose down",
     "restart:docker": "docker-compose down && docker-compose up --build -d",
-    "rebuild:docker:dev": "cross-env ENVIRONMENT=dev docker-compose build --no-cache && docker-compose up",
-    "rebuild:docker:prod": "cross-env ENVIRONMENT=prod docker-compose build --no-cache && docker-compose up"
+    "rebuild:docker:dev": "cross-env ENVIRONMENT=development docker-compose build --no-cache && docker-compose up",
+    "rebuild:docker:prod": "cross-env ENVIRONMENT=production docker-compose build --no-cache && docker-compose up"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",

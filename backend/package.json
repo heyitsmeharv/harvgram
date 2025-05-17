@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production  node src/app.js",
     "dev": "cross-env NODE_ENV=development  nodemon src/app.js",
-    "build": "docker build -t harvgram-backend .",
-    "run": "docker run -p 5002:5002 --env-file .env.development harvgram-backend",
+    "build": "docker build -t backend .",
+    "run": "docker run -p 5002:5002 --env-file .env.development backend",
     "start:docker": "docker-compose --env-file .env.development up --build backend",
     "start:docker:prod": "docker-compose --env-file .env.production up --build backend",
     "stop:docker": "docker-compose down"
