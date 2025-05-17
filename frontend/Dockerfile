@@ -21,4 +21,4 @@
   COPY --from=builder /app/dist ./dist
   EXPOSE 3000
 
-  CMD ["sh", "-c", "echo 'Container started ✅' && sleep 600"]
+  CMD ["serve", "-s", "dist", "-l", "3000", "--host", "0.0.0.0"]

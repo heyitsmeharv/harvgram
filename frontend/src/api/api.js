@@ -21,6 +21,10 @@ export const api = {
   delete: (path, body, options) => request(path, { method: "DELETE", body: JSON.stringify(body), ...options }),
 };
 
+export const healthCheck = async () => {
+  return await api.get("/health", {});
+};
+
 export const login = async (email, password) => {
   return await api.post("/login", { email, password });
 }
