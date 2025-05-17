@@ -21,5 +21,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-# 🔍 Debug + start
-CMD ["sh", "-c", "echo '📦 Contents of dist:' && ls -la ./dist && echo '🚀 Starting serve...' && serve -s dist -l 3000 --host 0.0.0.0"]
+CMD ["sh", "-c", "ls -la ./dist && sleep 300"]
