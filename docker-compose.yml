@@ -25,7 +25,7 @@ services:
       - AWS_SESSION_TOKEN
       - AWS_REGION=eu-west-2
     ports:
-      - "5173:3000"
+      - "3000:3000"
     env_file:
       - ./frontend/.env.${ENVIRONMENT}
     volumes:
