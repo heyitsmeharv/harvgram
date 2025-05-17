@@ -15,9 +15,10 @@
   RUN npm run build
   
   # --- prod stage: serve dist ---
-  FROM node:20-alpine AS production
+  FROM node:20 AS production
   WORKDIR /app
   RUN npm install -g serve
   COPY --from=builder /app/dist ./dist
   EXPOSE 3000
-  CMD ["serve", "-s", "dist", "-l", "3000", "--host", "0.0.0.0"]
+
+  CMD ["sh", "-c", "echo 'Container started ✅' && sleep 600"]
