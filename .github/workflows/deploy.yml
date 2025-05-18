@@ -104,6 +104,9 @@ jobs:
     name: Register ECS Task Definitions
     runs-on: ubuntu-latest
     needs: docker
+    outputs:
+      frontend_task_def_arn: ${{ steps.register-frontend.outputs.frontend_task_def_arn }}
+      backend_task_def_arn: ${{ steps.register-backend.outputs.backend_task_def_arn }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
