@@ -23,7 +23,7 @@ resource "aws_lb_target_group" "frontend" {
   target_type = "ip"
 
   health_check {
-    path                = "/health.html"
+    path                = "/"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
