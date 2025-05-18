@@ -26,13 +26,11 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          role-to-assume: ${{ secrets.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Assume role
+      - name: Assume sandbox role
+        shell: bash
         run: |
           CREDS=$(aws sts assume-role \
             --role-arn "${{ env.SANDBOX_ROLE }}" \
@@ -69,13 +67,11 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          role-to-assume: ${{ secrets.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Assume role
+      - name: Assume sandbox role
+        shell: bash
         run: |
           CREDS=$(aws sts assume-role \
             --role-arn "${{ env.SANDBOX_ROLE }}" \
@@ -85,6 +81,7 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')" >> $GITHUB_ENV
           echo "AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')" >> $GITHUB_ENV
+
 
       - uses: actions/checkout@v3
 
@@ -113,13 +110,11 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          role-to-assume: ${{ secrets.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Assume role
+      - name: Assume sandbox role
+        shell: bash
         run: |
           CREDS=$(aws sts assume-role \
             --role-arn "${{ env.SANDBOX_ROLE }}" \
@@ -129,6 +124,12 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')" >> $GITHUB_ENV
           echo "AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')" >> $GITHUB_ENV
+
+
+      - uses: actions/checkout@v3
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
       - name: Register new frontend task definition
         run: |
@@ -190,13 +191,11 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.GITHUBOIDCROLE }}
+          role-to-assume: ${{ secrets.GITHUBOIDCROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Assume role
+      - name: Assume sandbox role
+        shell: bash
         run: |
           CREDS=$(aws sts assume-role \
             --role-arn "${{ env.SANDBOX_ROLE }}" \
