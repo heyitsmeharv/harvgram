@@ -30,6 +30,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume sandbox role
+        id: assume-role
         shell: bash
         run: |
           CREDS=$(aws sts assume-role \
@@ -71,6 +72,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume sandbox role
+        id: assume-role
         shell: bash
         run: |
           CREDS=$(aws sts assume-role \
@@ -114,6 +116,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume sandbox role
+        id: assume-role
         shell: bash
         run: |
           CREDS=$(aws sts assume-role \
@@ -195,6 +198,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Assume sandbox role
+        id: assume-role
         shell: bash
         run: |
           CREDS=$(aws sts assume-role \
