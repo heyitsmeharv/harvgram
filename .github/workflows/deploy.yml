@@ -132,7 +132,7 @@ jobs:
       - name: Register new frontend task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition frontend-service \
+            --task-definition harvgram-frontend \
             --query "taskDefinition" \
             --output json > base-task-def.json
 
@@ -158,7 +158,7 @@ jobs:
       - name: Register new backend task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition backend-service \
+            --task-definition harvgram-backend \
             --query "taskDefinition" \
             --output json > base-task-def.json
 
