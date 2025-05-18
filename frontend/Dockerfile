@@ -1,24 +1,16 @@
-# --- dev stage ---
+# --- Stage 1: Build with Vite ---
 FROM node:20 AS development
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-
-# --- build stage ---
-FROM node:20 AS builder
-WORKDIR /app
-COPY --from=development /app /app
 RUN npm run build
 
-# --- production stage ---
-FROM node:20-alpine AS production
-WORKDIR /app
-RUN npm install -g serve
+# --- Stage 2: Serve with Nginx ---
+FROM nginx:alpine
+COPY --from=development /app/dist /usr/share/nginx/html
 
-# Copy static assets
-COPY --from=builder /app/dist ./dist
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
-
-CMD ["serve", "-s", "dist", "-l", "3000", "--host", "0.0.0.0"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
