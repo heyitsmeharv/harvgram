@@ -56,19 +56,19 @@ module "route53" {
   target_zone_id     = module.cloudfront.cloudfront_distribution_hosted_zone_id
 }
 
-module "ecs" {
-  source                = "../../modules/ecs"
-  vpc_id                = module.network.vpc_id
-  public_subnet_ids     = module.network.public_subnet_ids
-  private_subnet_ids    = module.network.private_subnet_ids
-  frontend_subnet_cidrs = module.network.frontend_subnet_cidrs
-  alb_listener_arn      = module.network.alb_arn
-  alb_sg_id             = module.network.alb_sg_id
-  alb_tg_frontend_arn   = module.network.alb_tg_frontend_arn
-  alb_tg_backend_arn    = module.network.alb_tg_backend_arn
-  frontend_image_url    = module.ecr.frontend_image_url
-  backend_image_url     = module.ecr.backend_image_url
-}
+# module "ecs" {
+#   source                = "../../modules/ecs"
+#   vpc_id                = module.network.vpc_id
+#   public_subnet_ids     = module.network.public_subnet_ids
+#   private_subnet_ids    = module.network.private_subnet_ids
+#   frontend_subnet_cidrs = module.network.frontend_subnet_cidrs
+#   alb_listener_arn      = module.network.alb_arn
+#   alb_sg_id             = module.network.alb_sg_id
+#   alb_tg_frontend_arn   = module.network.alb_tg_frontend_arn
+#   alb_tg_backend_arn    = module.network.alb_tg_backend_arn
+#   frontend_image_url    = module.ecr.frontend_image_url
+#   backend_image_url     = module.ecr.backend_image_url
+# }
 
 module "ecr" {
   source = "../../modules/ecr"
