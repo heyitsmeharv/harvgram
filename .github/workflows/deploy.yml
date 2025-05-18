@@ -224,7 +224,7 @@ jobs:
             --cluster ${{ env.CLUSTER }} \
             --service frontend-service \
             --force-new-deployment \
-            --task-definition ${{ needs.register-task-definitions.outputs.register-frontend.frontend_task_def_arn }} \
+            --task-definition ${{ needs.register-task-definitions.outputs.frontend_task_def_arn }} \
             --region ${{ env.AWS_REGION }}
 
       - name: Force ECS Deployment Backend
@@ -233,5 +233,5 @@ jobs:
             --cluster ${{ env.CLUSTER }} \
             --service backend-service \
             --force-new-deployment \
-            --task-definition ${{ needs.register-task-definitions.outputs.register-backend.backend_task_def_arn }} \
+            --task-definition ${{ needs.register-task-definitions.outputs.backend_task_def_arn }} \
             --region ${{ env.AWS_REGION }}
