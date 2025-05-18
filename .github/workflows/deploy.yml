@@ -130,6 +130,7 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: Register new frontend task definition
+        id: register-frontend
         run: |
           aws ecs describe-task-definition \
             --task-definition harvgram-frontend \
@@ -152,10 +153,15 @@ jobs:
             )
           ' base-task-def.json > new-task-def.json
 
-          aws ecs register-task-definition \
-            --cli-input-json file://new-task-def.json
+          ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://new-task-def.json \
+            --query "taskDefinition.taskDefinitionArn" \
+            --output text)
+
+          echo "frontend_task_def_arn=$ARN" >> $GITHUB_OUTPUT
 
       - name: Register new backend task definition
+        id: register-backend
         run: |
           aws ecs describe-task-definition \
             --task-definition harvgram-backend \
@@ -178,8 +184,12 @@ jobs:
             )
           ' base-task-def.json > new-task-def.json
 
-          aws ecs register-task-definition \
-            --cli-input-json file://new-task-def.json
+          ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://new-task-def.json \
+            --query "taskDefinition.taskDefinitionArn" \
+            --output text)
+
+          echo "backend_task_def_arn=$ARN" >> $GITHUB_OUTPUT
 
   force-ecs-deployment:
     name: Force ECS Deployment
@@ -211,6 +221,7 @@ jobs:
             --cluster ${{ env.CLUSTER }} \
             --service frontend-service \
             --force-new-deployment \
+            --task-definition ${{ needs.register-task-definitions.outputs.register-frontend.frontend_task_def_arn }} \
             --region ${{ env.AWS_REGION }}
 
       - name: Force ECS Deployment Backend
@@ -219,4 +230,5 @@ jobs:
             --cluster ${{ env.CLUSTER }} \
             --service backend-service \
             --force-new-deployment \
+            --task-definition ${{ needs.register-task-definitions.outputs.register-backend.backend_task_def_arn }} \
             --region ${{ env.AWS_REGION }}
