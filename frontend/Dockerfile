@@ -7,6 +7,7 @@
   RUN npm ci
   COPY . .
   RUN npm run build
+  RUN echo "--- FILES IN DIST ---" && ls -l /app/dist
   
   # --- Stage 2: Serve with Nginx ---
   FROM nginx:alpine
@@ -14,8 +15,6 @@
   
   # Copy the built frontend
   COPY --from=development /app/dist .
-
-  RUN echo "--- FILES IN /usr/share/nginx/html ---" && ls -l /usr/share/nginx/html
   
   # Copy custom Nginx config
   COPY nginx.conf /etc/nginx/conf.d/default.conf
