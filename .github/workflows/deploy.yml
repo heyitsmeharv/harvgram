@@ -153,7 +153,7 @@ jobs:
         run: terraform -chdir=infrastructure/environments/sandbox init
 
       - name: Terraform Plan
-        run: terraform -chdir=infrastructure/environments/sandbox plan -var="frontend_image_tag=${{ github.sha }}" -var="backend_image_tag=${{ github.sha }}" -var-file=env.tfvars
+        run: terraform -chdir=infrastructure/environments/sandbox plan -var="frontend_image_tag=$IMAGE_TAG" -var="backend_image_tag=$IMAGE_TAG" -var-file=env.tfvars
 
   terraform-apply:
     name: Terraform Apply
@@ -205,4 +205,4 @@ jobs:
         run: terraform -chdir=infrastructure/environments/sandbox init
 
       - name: Terraform Apply
-        run: terraform -chdir=infrastructure/environments/sandbox apply -var="frontend_image_tag=${{ github.sha }}" -var="backend_image_tag=${{ github.sha }}" -var-file=env.tfvars -auto-approve
+        run: terraform -chdir=infrastructure/environments/sandbox apply -var="frontend_image_tag=$IMAGE_TAG" -var="backend_image_tag=$IMAGE_TAG" -var-file=env.tfvars -auto-approve
