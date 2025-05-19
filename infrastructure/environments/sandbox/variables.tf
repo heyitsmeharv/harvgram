@@ -42,8 +42,3 @@ variable "backend_image_tag" {
   description = "GitHub SHA tag that's injected via CI/CD"
   type = string
 }
-
-variable "cloudfront_s3_bucket" {
-  description = "S3 bucket for cloudfront"
-  type = string
-}
