@@ -32,7 +32,7 @@ module "network" {
     aws.london   = aws.london
   }
 
-  private_subnet_ids    = module.network.private_subnet_ids
+  private_subnet_ids = module.network.private_subnet_ids
   security_groups = [
     module.ecs.frontend_sg_id,
     module.ecs.backend_sg_id
@@ -41,11 +41,12 @@ module "network" {
 }
 
 module "cloudfront" {
-  source              = "../../modules/cloudfront"
-  domain_name         = var.frontend_url
-  alb_dns_name        = module.network.alb_dns_name
-  alb_zone_id         = module.network.alb_zone_id
-  acm_certificate_arn = module.network.acm_certificate_arn
+  source               = "../../modules/cloudfront"
+  domain_name          = var.frontend_url
+  alb_dns_name         = module.network.alb_dns_name
+  alb_zone_id          = module.network.alb_zone_id
+  acm_certificate_arn  = module.network.acm_certificate_arn
+  cloudfront_s3_bucket = var.cloudfront_s3_bucket
 }
 
 module "route53" {

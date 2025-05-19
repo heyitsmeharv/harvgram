@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   aliases             = [var.domain_name]
 
   origin {
-    domain_name = var.alb_dns_name  
+    domain_name = var.alb_dns_name
     origin_id   = "alb-origin"
 
     custom_origin_config {
@@ -36,9 +36,15 @@ resource "aws_cloudfront_distribution" "frontend" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
+  logging_config {
+    bucket = "${aws_s3_bucket.cloudfront_logs.bucket}.s3.amazonaws.com"
+    prefix = "harvgram-logs/"
+  }
+
   restrictions {
     geo_restriction {
-      restriction_type = "none"
+      restriction_type = "whitelist"
+      locations        = ["GB"]
     }
   }
 

@@ -18,3 +18,8 @@ variable "acm_certificate_arn" {
   description = "ACM cert in us-east-1"
   type        = string
 }
+
+variable "cloudfront_s3_bucket" {
+  description = "S3 bucket for cloudfront"
+  type = string
+}
