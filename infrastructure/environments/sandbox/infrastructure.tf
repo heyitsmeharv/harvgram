@@ -68,6 +68,8 @@ module "ecs" {
   alb_tg_backend_arn    = module.network.alb_tg_backend_arn
   frontend_image_url    = module.ecr.frontend_image_url
   backend_image_url     = module.ecr.backend_image_url
+  frontend_image_tag    = var.frontend_image_tag
+  backend_image_tag     = var.backend_image_tag
 }
 
 module "ecr" {
