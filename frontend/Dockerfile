@@ -14,6 +14,8 @@
   
   # Copy the built frontend
   COPY --from=development /app/dist .
+
+  RUN echo "--- FILES IN /usr/share/nginx/html ---" && ls -l /usr/share/nginx/html
   
   # Copy custom Nginx config
   COPY nginx.conf /etc/nginx/conf.d/default.conf
