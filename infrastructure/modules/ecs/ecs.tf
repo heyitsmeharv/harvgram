@@ -3,11 +3,12 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_service" "frontend" {
-  name            = "frontend-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.frontend.arn
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  name                 = "frontend-service"
+  cluster              = aws_ecs_cluster.main.id
+  task_definition      = aws_ecs_task_definition.frontend.arn
+  launch_type          = "FARGATE"
+  desired_count        = 1
+  force_new_deployment = true
 
   network_configuration {
     subnets          = [var.private_subnet_ids[0], var.private_subnet_ids[1], var.private_subnet_ids[2]]
@@ -25,11 +26,13 @@ resource "aws_ecs_service" "frontend" {
 }
 
 resource "aws_ecs_service" "backend" {
-  name            = "backend-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.backend.arn
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  name                 = "backend-service"
+  cluster              = aws_ecs_cluster.main.id
+  task_definition      = aws_ecs_task_definition.backend.arn
+  launch_type          = "FARGATE"
+  desired_count        = 1
+  force_new_deployment = true
+
 
   network_configuration {
     subnets          = [var.private_subnet_ids[0], var.private_subnet_ids[1], var.private_subnet_ids[2]]

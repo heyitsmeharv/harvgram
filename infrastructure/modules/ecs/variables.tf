@@ -48,3 +48,12 @@ variable "backend_image_url" {
   type        = string
 }
 
+variable "frontend_image_tag" {
+  description = "GitHub SHA tag that's injected via CI/CD"
+  type = string
+}
+
+variable "backend_image_tag" {
+  description = "GitHub SHA tag that's injected via CI/CD"
+  type = string
+}
