@@ -7,7 +7,6 @@
   RUN npm ci
   COPY . .
   RUN npm run build
-  RUN echo "--- FILES IN DIST ---" && ls -l /app/dist
   
   # --- Stage 2: Serve with Nginx ---
   FROM nginx:alpine
