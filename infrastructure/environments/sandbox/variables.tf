@@ -36,9 +36,11 @@ variable "root_domain" {
 variable "frontend_image_tag" {
   description = "GitHub SHA tag that's injected via CI/CD"
   type = string
+  default = "not_set"
 }
 
 variable "backend_image_tag" {
   description = "GitHub SHA tag that's injected via CI/CD"
   type = string
+  default = "not_set"
 }
