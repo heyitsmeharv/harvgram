@@ -86,8 +86,16 @@ resource "aws_lb_listener_rule" "backend_api_route" {
 
 resource "aws_security_group" "alb_sg" {
   name        = "harvgram-alb-sg"
-  description = "Allow HTTP inbound traffic"
+  description = "Allow HTTP and HTTPS inbound traffic"
   vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
   ingress {
     from_port   = 443
