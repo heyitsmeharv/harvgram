@@ -100,13 +100,13 @@ jobs:
 
       - name: Build & Push Backend Image
         run: |
-          docker build -t ${{ env.ECR_REPO_BACKEND }}:${IMAGE_TAG} ./backend
+          docker build --no-cache -t ${{ env.ECR_REPO_BACKEND }}:${IMAGE_TAG} ./backend
           docker tag ${{ env.ECR_REPO_BACKEND }}:${IMAGE_TAG} ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_BACKEND }}:${IMAGE_TAG}
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_BACKEND }}:${IMAGE_TAG}
 
       - name: Build & Push Frontend Image
         run: |
-          docker build -t ${{ env.ECR_REPO_FRONTEND }}:${IMAGE_TAG} ./frontend
+          docker build --no-cache -t ${{ env.ECR_REPO_FRONTEND }}:${IMAGE_TAG} ./frontend
           docker tag ${{ env.ECR_REPO_FRONTEND }}:${IMAGE_TAG} ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:${IMAGE_TAG}
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_FRONTEND }}:${IMAGE_TAG}
 
