@@ -41,12 +41,12 @@ module "network" {
 }
 
 module "cloudfront" {
-  source               = "../../modules/cloudfront"
-  domain_name          = var.frontend_url
-  alb_dns_name         = module.network.alb_dns_name
-  alb_zone_id          = module.network.alb_zone_id
-  acm_certificate_arn  = module.network.acm_certificate_arn
-  cloudfront_s3_bucket = var.cloudfront_s3_bucket
+  source              = "../../modules/cloudfront"
+  domain_name         = var.frontend_url
+  alb_dns_name        = module.network.alb_dns_name
+  alb_zone_id         = module.network.alb_zone_id
+  acm_certificate_arn = module.network.acm_certificate_arn
+  bucket_name         = var.bucket_name
 }
 
 module "route53" {

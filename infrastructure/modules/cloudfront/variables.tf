@@ -19,7 +19,7 @@ variable "acm_certificate_arn" {
   type        = string
 }
 
-variable "cloudfront_s3_bucket" {
-  description = "S3 bucket for cloudfront"
-  type = string
+variable "bucket_name" {
+  description = "Name of the existing S3 bucket"
+  type        = string
 }

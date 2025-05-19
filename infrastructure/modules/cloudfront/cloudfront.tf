@@ -37,8 +37,8 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   logging_config {
-    bucket = "${aws_s3_bucket.cloudfront_logs.bucket}.s3.amazonaws.com"
-    prefix = "harvgram-logs/"
+    bucket = "${var.bucket_name}.s3.amazonaws.com"
+    prefix = "cloudfront/"
   }
 
   restrictions {
