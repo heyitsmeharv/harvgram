@@ -17,7 +17,7 @@ resource "aws_security_group" "backend_sg" {
   }
 }
 
-# ALB → Frontend
+# ALB → Frontend Inbound
 resource "aws_security_group_rule" "alb_to_frontend" {
   type                     = "ingress"
   from_port                = 3000
@@ -25,6 +25,16 @@ resource "aws_security_group_rule" "alb_to_frontend" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.frontend_sg.id
   source_security_group_id = var.alb_sg_id
+}
+
+# ALB → Frontend Outbound
+resource "aws_security_group_rule" "alb_to_frontend_egress" {
+  type                     = "egress"
+  from_port                = 3000
+  to_port                  = 3000
+  protocol                 = "tcp"
+  security_group_id        = var.alb_sg_id
+  source_security_group_id = aws_security_group.frontend_sg.id
 }
 
 # ALB → Backend
