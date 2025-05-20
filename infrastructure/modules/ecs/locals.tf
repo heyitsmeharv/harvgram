@@ -24,9 +24,6 @@ locals {
           awslogs-stream-prefix = "frontend"
         }
       }
-      environment : [
-        { "name" : "VITE_API_BASE_URL", "value" : "https://www.harvgram.co.uk/api/" }
-      ]
     }
   ]
 }
@@ -53,7 +50,6 @@ locals {
         }
       }
       environment : [
-        { "name" : "VITE_API_BASE_URL", "value" : "https://www.harvgram.co.uk/api/" },
         { "name" : "AWS_REGION", "value" : "eu-west-2" },
         { "name" : "UPLOAD_PICTURE_LAMBDA", "value" : "harvgram_create_picture_entry" },
         { "name" : "GET_PICTURES_LAMBDA", "value" : "harvgram_get_pictures" },
