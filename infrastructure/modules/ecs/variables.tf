@@ -50,10 +50,20 @@ variable "backend_image_url" {
 
 variable "frontend_image_tag" {
   description = "GitHub SHA tag that's injected via CI/CD"
-  type = string
+  type        = string
 }
 
 variable "backend_image_tag" {
   description = "GitHub SHA tag that's injected via CI/CD"
-  type = string
+  type        = string
+}
+
+variable "cognito_client_id_arn" {
+  description = "Cognito client id"
+  type        = string
+}
+
+variable "cognito_user_pool_id_arn" {
+  description = "Cognito user pool id"
+  type        = string
 }
