@@ -10,7 +10,7 @@ const ThemeToggleButton = () => {
 
   return (
     <Tooltip title={mode === "light" ? "Toggle Dark Mode" : "Toggle Light Mode"}>
-      <IconButton color="inherit" onClick={toggleTheme} sx={{ position: "fixed", bottom: 20, left: 20, zIndex: 100, color: theme.palette.background.main }}>
+      <IconButton color="inherit" onClick={toggleTheme} sx={{ position: "fixed", bottom: 20, left: 20, zIndex: 100, color: theme.palette.background.text }}>
         {mode === "light" ? <DarkModeIcon fontSize="large" /> : <LightModeIcon fontSize="large" />}
       </IconButton>
     </Tooltip>

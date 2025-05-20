@@ -92,7 +92,12 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   color: theme.palette.text.main,
   "& .MuiInputLabel-root": {
     color: theme.palette.text.main,
-  }
+  },
+  "& .MuiFormHelperText-root": {
+    color: theme.palette.text.main,
+    fontWeight: "bold",
+    fontStyle: "italic"
+  },
 }));
 
 const StyledText = styled(Typography)(({ theme }) => ({
@@ -255,7 +260,7 @@ export default function UploadOverlay({ open, onClose }) {
               fullWidth
               value={tag}
               onChange={(e) => setTag(e.target.value)}
-              helperText="Separate with commas, e.g. nature, beach, summer"
+              helperText="Separate with commas, e.g. nature, beach, summer, thirsty"
               margin="normal"
             />
             <StyledText>{prettyDate}</StyledText>

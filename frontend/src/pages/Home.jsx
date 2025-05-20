@@ -20,13 +20,13 @@ const MotionBox = motion(Box);
 
 const FloatingButton = styled(IconButton)(({ theme }) => ({
   position: "fixed",
-  bottom: theme.spacing(2),
-  right: theme.spacing(2),
-  zIndex: 999,
-  color: theme.palette.background.main,
+  bottom: 20,
+  right: 20,
+  zIndex: 100,
+  color: theme.palette.background.text,
   boxShadow: theme.shadows[6],
   "&:hover": {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.background,
   },
 }));
 
@@ -108,4 +108,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Home;   

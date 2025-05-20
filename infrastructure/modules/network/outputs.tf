@@ -39,7 +39,7 @@ output "alb_arn" {
 }
 
 output "alb_listener_arn" {
-  value = aws_lb_listener.http.arn
+  value = aws_lb_listener.https.arn
 }
 
 output "alb_sg_id" {
