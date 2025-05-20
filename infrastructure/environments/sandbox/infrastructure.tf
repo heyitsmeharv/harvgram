@@ -24,6 +24,12 @@ module "cognito" {
   source = "../../modules/cognito"
 }
 
+module "secrets" {
+  source               = "../../modules/secrets_manager"
+  cognito_user_pool_id = module.cognito.cognito_user_pool_id
+  cognito_client_id    = module.cognito.cognito_client_id
+}
+
 module "network" {
   source = "../../modules/network"
 
@@ -76,10 +82,4 @@ module "ecs" {
 }
 module "ecr" {
   source = "../../modules/ecr"
-}
-
-module "secrets" {
-  source               = "../../modules/secrets_manager"
-  cognito_user_pool_id = module.cognito.cognito_user_pool_id
-  cognito_client_id    = module.cognito.cognito_client_id
 }
