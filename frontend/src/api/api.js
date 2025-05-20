@@ -9,7 +9,7 @@ const request = async (path, options = {}) => {
   });
 
   const isJSON = res.headers.get("content-type")?.includes("application/json");
-  const data = isJSON ? await res.json() : null;
+  const data = isJSON ? await res.json() : { message: "Unknown error" };
 
   if (!res.ok) throw ApiError.fromResponse(res, data);
   return data;
