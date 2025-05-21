@@ -20,10 +20,8 @@ const getSecretValue = secret => {
   }
 }
 
-const USER_POOL_ID = getSecretValue(process.env.COGNITO_USER_POOL_ID);
-const CLIENT_ID    = getSecretValue(process.env.COGNITO_CLIENT_ID);
-
-console.log("details", USER_POOL_ID, CLIENT_ID)
+const COGNITO_USER_POOL_ID = getSecretValue(process.env.COGNITO_USER_POOL_ID);
+const COGNITO_CLIENT_ID    = getSecretValue(process.env.COGNITO_CLIENT_ID);
 
 export const initiateLogin = async (email, password) => {
   const command = new AdminInitiateAuthCommand({
@@ -73,7 +71,7 @@ export const completeChangePassword = async (session, email, newPassword) => {
 export const refresh = async (refreshToken) => {
   const command = new InitiateAuthCommand({
     AuthFlow: "REFRESH_TOKEN_AUTH",
-    ClientId: process.env.COGNITO_CLIENT_ID,
+    ClientId: COGNITO_CLIENT_ID,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
     },
