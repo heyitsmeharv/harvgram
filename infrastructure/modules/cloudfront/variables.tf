@@ -19,11 +19,6 @@ variable "acm_certificate_arn" {
   type        = string
 }
 
-variable "acm_certificate_api_arn" {
-  description = "ACM cert in us-east-1"
-  type        = string
-}
-
 variable "bucket_name" {
   description = "Name of the existing S3 bucket"
   type        = string

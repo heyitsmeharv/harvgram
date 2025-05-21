@@ -3,71 +3,53 @@ resource "aws_cloudfront_distribution" "frontend" {
   default_root_object = "index.html"
   aliases             = [var.domain_name]
 
-  # Frontend ECS via ALB
   origin {
     domain_name = var.alb_dns_name
-    origin_id   = "frontend-alb"
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
-  }
-
-  # Backend ECS via ALB (same ALB, different path)
-  origin {
-    domain_name = var.alb_dns_name
-    origin_id   = "backend-alb"
+    origin_id   = "alb-origin"
 
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "https-only"
+      origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
-    }
-
-    custom_header {
-      name  = "Host"
-      value = "api.harvgram.co.uk"
     }
   }
 
-  # === CACHE BEHAVIORS ===
-
-  # /api/* → backend ECS
-  ordered_cache_behavior {
-    path_pattern           = "/api/*"
-    target_origin_id       = "backend-alb"
-    viewer_protocol_policy = "redirect-to-https"
+  default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"]
     cached_methods         = ["GET", "HEAD"]
-
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "all"
-      }
-    }
-
-    compress = true
-  }
-
-  # Everything else → frontend ECS
-  default_cache_behavior {
-    target_origin_id       = "frontend-alb"
+    target_origin_id       = "alb-origin"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
+    compress               = true
 
     forwarded_values {
       query_string = false
+      headers      = ["Authorization", "Content-Type"]
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/api/*"
+    target_origin_id       = "alb-origin"
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods  = ["GET", "HEAD"]
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization", "Content-Type"]
       cookies {
         forward = "none"
       }
     }
 
-    compress = true
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
   }
 
   viewer_certificate {
@@ -88,11 +70,11 @@ resource "aws_cloudfront_distribution" "frontend" {
     }
   }
 
-  custom_error_response {
-    error_code         = 500
-    response_code      = 500
-    response_page_path = "/errors/500.html"
-  }
+  # custom_error_response {
+  #   error_code         = 500
+  #   response_code      = 500
+  #   response_page_path = "/errors/500.html"
+  # }
 
   custom_error_response {
     error_code         = 502

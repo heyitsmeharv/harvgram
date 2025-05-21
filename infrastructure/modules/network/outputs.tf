@@ -39,7 +39,7 @@ output "alb_arn" {
 }
 
 output "alb_listener_arn" {
-  value = aws_lb_listener.https.arn
+  value = aws_lb_listener.http.arn
 }
 
 output "alb_sg_id" {
@@ -56,8 +56,4 @@ output "alb_tg_backend_arn" {
 
 output "acm_certificate_arn" {
   value = data.aws_acm_certificate.auth_cert_virginia.arn
-}
-
-output "acm_certificate_api_arn" {
-  value = data.aws_acm_certificate.auth_cert_virginia_api.arn
 }

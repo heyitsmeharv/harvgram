@@ -52,7 +52,6 @@ module "cloudfront" {
   alb_dns_name            = module.network.alb_dns_name
   alb_zone_id             = module.network.alb_zone_id
   acm_certificate_arn     = module.network.acm_certificate_arn
-  acm_certificate_api_arn = module.network.acm_certificate_api_arn
   bucket_name             = var.bucket_name
 }
 

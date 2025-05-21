@@ -57,12 +57,10 @@ resource "aws_lb_target_group" "backend" {
   }
 }
 
-resource "aws_lb_listener" "https" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.harvgram.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-  certificate_arn   = data.aws_acm_certificate.auth_cert_london_api.arn
+  port              = 80
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
@@ -71,7 +69,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener_rule" "backend_api_route" {
-  listener_arn = aws_lb_listener.https.arn
+  listener_arn = aws_lb_listener.http.arn
   priority     = 10
 
   action {
@@ -81,42 +79,22 @@ resource "aws_lb_listener_rule" "backend_api_route" {
 
   condition {
     path_pattern {
-    values = ["/api/*"]
+      values = ["/api/*"]
     }
   }
 }
 
-# resource "aws_lb_listener" "http" {
-#   load_balancer_arn = aws_lb.harvgram.arn
-#   port              = 80
-#   protocol          = "HTTP"
-
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.frontend.arn
-#   }
-# }
-
-# resource "aws_lb_listener_rule" "backend_api_route" {
-#   listener_arn = aws_lb_listener.http.arn
-#   priority     = 10
-
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.backend.arn
-#   }
-
-#   condition {
-#     path_pattern {
-#       values = ["/api/*"]
-#     }
-#   }
-# }
-
 resource "aws_security_group" "alb_sg" {
   name        = "harvgram-alb-sg"
-  description = "Allow HTTP inbound traffic" # Allow HTTPS inbound traffic
+  description = "Allow HTTP inbound traffic"
   vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 443
