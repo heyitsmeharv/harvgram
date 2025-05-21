@@ -57,3 +57,7 @@ output "alb_tg_backend_arn" {
 output "acm_certificate_arn" {
   value = data.aws_acm_certificate.auth_cert_virginia.arn
 }
+
+output "acm_certificate_api_arn" {
+  value = data.aws_acm_certificate.auth_cert_virginia_api.arn
+}

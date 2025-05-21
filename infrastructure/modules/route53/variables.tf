@@ -17,3 +17,13 @@ variable "target_zone_id" {
   description = "CloudFront hosted zone ID"
   type        = string
 }
+
+variable "alb_dns_name" {
+  description = "public DNS name of the ALB"
+  type        = string
+}
+
+variable "alb_zone_id" {
+  description = "zone ID of the ALB"
+  type        = string
+}

@@ -7,7 +7,6 @@ resource "aws_cloudfront_distribution" "frontend" {
   origin {
     domain_name = var.alb_dns_name
     origin_id   = "frontend-alb"
-
     custom_origin_config {
       http_port              = 80
       https_port             = 443
@@ -26,6 +25,11 @@ resource "aws_cloudfront_distribution" "frontend" {
       https_port             = 443
       origin_protocol_policy = "https-only"
       origin_ssl_protocols   = ["TLSv1.2"]
+    }
+
+    custom_header {
+      name  = "Host"
+      value = "api.harvgram.co.uk"
     }
   }
 
