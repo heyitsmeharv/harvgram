@@ -37,6 +37,13 @@
         "cognito-idp:AdminRespondToAuthChallenge"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": "*"
     }
   ]
 }
