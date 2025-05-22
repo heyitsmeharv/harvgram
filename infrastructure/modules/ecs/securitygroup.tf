@@ -34,6 +34,25 @@ resource "aws_security_group" "backend_sg" {
   }
 }
 
+# Security group for all endpoints
+resource "aws_security_group" "vpce_sg" {
+  name   = "harvgram-vpce-sg"
+  vpc_id = var.vpc_id
+
+  ingress {
+    from_port                = 443
+    to_port                  = 443
+    protocol                 = "tcp"
+    source_security_group_id = aws_security_group.backend_sg.id
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 # Allow ALB to talk to frontend on port 3000
 resource "aws_security_group_rule" "alb_to_frontend" {
   type                     = "ingress"
@@ -118,4 +137,40 @@ resource "aws_security_group_rule" "backend_dns_tcp" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.backend_sg.id
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = var.private_subnet_ids
+  security_group_ids = aws_security_group.vpce_sg.id
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = var.private_subnet_ids
+  security_group_ids = aws_security_group.vpce_sg.id
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "secretsmanager" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.${var.aws_region}.secretsmanager"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = var.private_subnet_ids
+  security_group_ids = aws_security_group.vpce_sg.id
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "cognito_idp" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.${var.aws_region}.cognito-idp"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = var.private_subnet_ids
+  security_group_ids = aws_security_group.vpce_sg.id
+  private_dns_enabled = true
 }

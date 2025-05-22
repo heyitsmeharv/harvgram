@@ -1,3 +1,9 @@
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+  default     = "eu-west-2"
+}
+
 variable "vpc_id" {
   description = "VPC id"
   type        = string

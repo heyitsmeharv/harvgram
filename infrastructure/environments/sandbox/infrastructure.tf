@@ -67,6 +67,7 @@ module "route53" {
 
 module "ecs" {
   source                   = "../../modules/ecs"
+  aws_region               = var.aws_region
   vpc_id                   = module.network.vpc_id
   public_subnet_ids        = module.network.public_subnet_ids
   private_subnet_ids       = module.network.private_subnet_ids
