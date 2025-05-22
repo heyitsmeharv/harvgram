@@ -31,6 +31,7 @@ const ContentBox = styled(MotionBox)(({ theme }) => ({
   padding: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
   width: "90%",
+  maxHeight: "80%",
   maxWidth: 500,
   position: "relative",
   boxShadow: theme.shadows[5],
@@ -53,7 +54,7 @@ const LoaderOverlay = styled(Box)(({ theme }) => ({
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   bottom: theme.spacing(2),
-  right: theme.spacing(4),
+  left: theme.spacing(4),
   backgroundColor: theme.palette.button.main,
   color: theme.palette.text.main,
   "&:hover": {
@@ -67,11 +68,9 @@ const UploadButton = styled(Box)(({ theme }) => ({
   border: `2px dashed ${theme.palette.text.main}`,
   backgroundColor: theme.palette.background.main,
   borderRadius: theme.shape.borderRadius,
-  marginBottom: theme.spacing(2),
   color: theme.palette.text.main,
   textTransform: "none",
-
-  minHeight: "370px",
+  height: "350px",
   placeSelf: "center",
   display: "flex",
   alignItems: "center",
@@ -86,6 +85,11 @@ const UploadButton = styled(Box)(({ theme }) => ({
     width: "145px",
     height: "145px",
   }
+}));
+
+const StyledGrow = styled(Grow)(({ theme }) => ({
+  height: "350px",
+  width: "100%"
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -104,7 +108,8 @@ const StyledText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.main
 }));
 
-export default function UploadOverlay({ open, onClose }) {
+export default function UploadOverlay({ open, user, isEdit, data, setData, onClose }) {
+  console.log("data", data);
   const theme = useTheme();
   const queryClient = useQueryClient();
   const [imagePreview, setImagePreview] = useState("");
@@ -113,6 +118,7 @@ export default function UploadOverlay({ open, onClose }) {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [tag, setTag] = useState("#");
+  const [email] = useState(user);
   const [date] = useState(new Date());
   const prettyDate = hdate.prettyPrint(date);
   const [loading, setLoading] = useState(false);
@@ -126,6 +132,7 @@ export default function UploadOverlay({ open, onClose }) {
     setTitle("");
     setCaption("");
     setTag("");
+    setData([]);
     setLoading(false);
   }
 
@@ -153,6 +160,7 @@ export default function UploadOverlay({ open, onClose }) {
         title: title,
         caption: caption,
         tag: tag.split(",").map(t => t.trim()),
+        user: email
       }
       uploadFile(payload);
     }
@@ -222,11 +230,11 @@ export default function UploadOverlay({ open, onClose }) {
                 </UploadButton>
               </form>
               :
-              <Grow in={imagePreview !== ""}
+              <StyledGrow in={imagePreview !== ""}
                 {...{ timeout: 1000 }}
               >
                 <img src={imagePreview} />
-              </Grow>
+              </StyledGrow>
             }
             {imagePreview !== "" && <IconButton
               onClick={() => reset()}
@@ -262,8 +270,13 @@ export default function UploadOverlay({ open, onClose }) {
               onChange={(e) => setTag(e.target.value)}
               helperText="Separate with commas, e.g. nature, beach, summer, thirsty"
               margin="normal"
+              sx={{ marginBottom: "50px" }}
             />
-            <StyledText>{prettyDate}</StyledText>
+            <StyledText
+              sx={{ position: "absolute", bottom: "25px", right: "25px" }}
+            >
+              {prettyDate}
+            </StyledText>
             {file !== null &&
               <StyledIconButton
                 disabled={file === '' || title === '' || caption === '' ? true : false}

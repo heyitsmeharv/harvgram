@@ -44,7 +44,7 @@ const createPictureEntry = async (event, context) => {
   }
   logger.info("Lambda execution details", { ...metadata, ...annotations });
 
-  const { title, caption, tag, image } = event;
+  const { title, caption, tag, image, user } = event;
 
   const now = new Date();
 
@@ -54,6 +54,7 @@ const createPictureEntry = async (event, context) => {
     caption,
     tag,
     createdAt: now.toISOString(),
+    user
   }
 
   const base64 = image.replace(/^data:image\/w+;base64,/, '');

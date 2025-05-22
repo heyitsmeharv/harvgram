@@ -21,10 +21,10 @@ export const getPicture = async (req, res) => {
 };
 
 export const createPictureEntry = async (req, res) => {
-  const { image, title, caption, tag } = req.body;
+  const { image, title, caption, tag, user } = req.body;
 
   try {
-    const result = await uploadPicture(title, caption, tag, image);
+    const result = await uploadPicture(title, caption, tag, image, user);
     return res.status(200).json({
       status: 200,
       body: result

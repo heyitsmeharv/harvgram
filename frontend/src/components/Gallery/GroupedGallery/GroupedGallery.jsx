@@ -5,7 +5,7 @@ import { format } from "date-fns";
 
 import GalleryItem from "../GalleryItem/GalleryItem";
 
-const GroupedGallery = ({ pictures, filterPictures, search, deleteImage, queryClient, deletingId, setDeletingId }) => {
+const GroupedGallery = ({ pictures, filterPictures, search, deleteImage, queryClient, deletingId, setDeletingId, user, setIsEdit, setData, setShowOverlay }) => {
   const theme = useTheme();
 
   const groupByMonth = (items) => {
@@ -55,6 +55,10 @@ const GroupedGallery = ({ pictures, filterPictures, search, deleteImage, queryCl
                       deleteImage={deleteImage}
                       queryClient={queryClient}
                       setDeletingId={setDeletingId}
+                      user={user}
+                      setIsEdit={setIsEdit}
+                      setData={setData}
+                      setShowOverlay={setShowOverlay}
                     />
                   ))}
                 </AnimatePresence>

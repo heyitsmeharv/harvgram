@@ -57,6 +57,8 @@ const Home = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [data, setData] = useState([]);
 
   const filterPictures = useMemo(() => {
     if (!debouncedSearch.trim()) return pictures;
@@ -93,10 +95,14 @@ const Home = () => {
     >
       <TopBar search={search} setSearch={setSearch} onLogout={handleLogout} user={user} />
       <GalleryGrid>
-        <GroupedGallery pictures={pictures ? pictures : []} filterPictures={filterPictures} search={search} queryClient={queryClient} deleteImage={deleteImage} deletingId={deletingId} setDeletingId={setDeletingId} />
+        <GroupedGallery pictures={pictures ? pictures : []} filterPictures={filterPictures} search={search} queryClient={queryClient} deleteImage={deleteImage} deletingId={deletingId} setDeletingId={setDeletingId} user={user.email} setIsEdit={setIsEdit} setData={setData} setShowOverlay={setShowOverlay} />
       </GalleryGrid>
       <UploadOverlay
         open={showOverlay}
+        user={user.email}
+        isEdit={isEdit}
+        data={data}
+        setData={setData}
         onClose={() => handleOverlay()}
       />
       <Tooltip title="Upload">

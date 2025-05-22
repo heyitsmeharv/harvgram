@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { styled } from "@mui/system";
 import { motion } from "framer-motion";
 import hdate from "human-date";
@@ -15,8 +16,7 @@ const CardWrapper = styled(MotionBox)(({ theme }) => ({
   flexDirection: 'column',
   boxShadow: theme.shadows[3],
   transition: 'box-shadow 0.3s ease',
-  maxWidth: "450px",
-  minWidth: "450px",
+  width: "clamp(370px, 80vw, 450px)",
   maxHeight: "666px",
   '&:hover': {
     boxShadow: theme.shadows[6],
@@ -48,7 +48,7 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const GalleryImage = styled(motion.img)({
-   width: '100%',
+  width: '100%',
   height: '100%',
   objectFit: 'cover',
   transition: 'all 0.5s ease',
@@ -98,10 +98,20 @@ const DeleteButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
   bottom: theme.spacing(2),
   right: theme.spacing(2),
-  backgroundColor: theme.palette.error.main,
-  color: theme.palette.common.white,
+  color: theme.palette.common.text,
   '&:hover': {
-    backgroundColor: theme.palette.error.dark,
+    color: theme.palette.error.dark,
+  },
+  padding: theme.spacing(0.5),
+}));
+
+const EditButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2),
+  right: theme.spacing(8),
+  color: theme.palette.common.text,
+  '&:hover': {
+    color: theme.palette.button.main,
   },
   padding: theme.spacing(0.5),
 }));
@@ -120,7 +130,7 @@ const LoadingBox = styled(Box)(({ theme }) => ({
   zIndex: 2,
 }));
 
-const GalleryItem = ({ picture, deletingId, deleteImage, queryClient, setDeletingId }) => {
+const GalleryItem = ({ picture, deletingId, deleteImage, queryClient, setDeletingId, user, setIsEdit, setData, setShowOverlay }) => {
   return (
     <CardWrapper
       key={picture.id}
@@ -168,17 +178,32 @@ const GalleryItem = ({ picture, deletingId, deleteImage, queryClient, setDeletin
         <Date variant="caption" color="text.disabled">
           {hdate.prettyPrint(picture.createdAt)}
         </Date>
-        <DeleteButton
-          onClick={async () => {
-            setDeletingId(picture.id);
-            await deleteImage(picture.id, picture.pictureUrl);
-            queryClient.invalidateQueries(["pictures"]);
-          }}
-        >
-          <DeleteIcon fontSize="medium" />
-        </DeleteButton>
+        {picture.user === user && (
+          <>
+            <EditButton
+              disabled
+              onClick={() => {
+                setIsEdit(true)
+                setData(picture)
+                setShowOverlay(true)
+                queryClient.invalidateQueries(["pictures"]);
+              }}
+            >
+              <EditIcon fontSize="medium" />
+            </EditButton>
+            <DeleteButton
+              onClick={async () => {
+                setDeletingId(picture.id);
+                await deleteImage(picture.id, picture.pictureUrl);
+                queryClient.invalidateQueries(["pictures"]);
+              }}
+            >
+              <DeleteIcon fontSize="medium" />
+            </DeleteButton>
+          </>
+        )}
       </DetailsBox>
-    </CardWrapper>
+    </CardWrapper >
   );
 };
 
