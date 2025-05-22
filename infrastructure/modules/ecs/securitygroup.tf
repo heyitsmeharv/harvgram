@@ -82,3 +82,40 @@ resource "aws_security_group_rule" "backend_to_internet" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.backend_sg.id
 }
+
+# Allow DNS lookups (UDP & TCP) from your tasks
+resource "aws_security_group_rule" "frontend_dns_udp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.frontend_sg.id
+}
+
+resource "aws_security_group_rule" "frontend_dns_tcp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.frontend_sg.id
+}
+
+resource "aws_security_group_rule" "backend_dns_udp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.backend_sg.id
+}
+
+resource "aws_security_group_rule" "backend_dns_tcp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.backend_sg.id
+}
