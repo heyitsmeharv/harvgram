@@ -11,9 +11,9 @@ resource "aws_ecs_service" "frontend" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [var.private_subnet_ids[0], var.private_subnet_ids[1], var.private_subnet_ids[2]]
+    subnets          = [var.public_subnet_ids[0], var.public_subnet_ids[1], var.public_subnet_ids[2]]
     security_groups  = [aws_security_group.frontend_sg.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -35,9 +35,9 @@ resource "aws_ecs_service" "backend" {
 
 
   network_configuration {
-    subnets          = [var.private_subnet_ids[0], var.private_subnet_ids[1], var.private_subnet_ids[2]]
+    subnets          = [var.public_subnet_ids[0], var.public_subnet_ids[1], var.public_subnet_ids[2]]
     security_groups  = [aws_security_group.backend_sg.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
