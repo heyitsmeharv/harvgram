@@ -28,6 +28,15 @@
         "secretsmanager:GetSecretValue"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:InitiateAuth",
+        "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminRespondToAuthChallenge"
+      ],
+      "Resource": "*"
     }
   ]
 }
