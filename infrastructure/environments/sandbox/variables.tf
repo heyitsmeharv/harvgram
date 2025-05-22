@@ -1,3 +1,9 @@
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+  default     = "eu-west-2"
+}
+
 variable "role_arn" {
   type        = string
   description = "arn of the role that will terraform into aws account"

@@ -34,23 +34,42 @@ resource "aws_security_group" "backend_sg" {
   }
 }
 
-# Security group for all endpoints
+# VPC Endpoint Security Group
 resource "aws_security_group" "vpce_sg" {
   name   = "harvgram-vpce-sg"
+  description = "Security group for all endpoints" 
   vpc_id = var.vpc_id
 
-  ingress {
-    from_port                = 443
-    to_port                  = 443
-    protocol                 = "tcp"
-    source_security_group_id = aws_security_group.backend_sg.id
-  }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+   tags = {
+    Name = "vpc-endpoint-sg"
+  }
+}
+
+# Allow backend tasks to call the endpoints
+resource "aws_security_group_rule" "vpce_from_backend" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.vpce_sg.id
+  source_security_group_id = aws_security_group.backend_sg.id
+}
+
+# Allow frontend tasks to call the endpoints
+resource "aws_security_group_rule" "vpce_from_frontend" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.vpce_sg.id
+  source_security_group_id = aws_security_group.frontend_sg.id
 }
 
 # Allow ALB to talk to frontend on port 3000
