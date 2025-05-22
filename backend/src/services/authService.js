@@ -21,7 +21,10 @@ const getSecretValue = secret => {
 }
 
 const COGNITO_USER_POOL_ID = getSecretValue(process.env.COGNITO_USER_POOL_ID);
-const COGNITO_CLIENT_ID    = getSecretValue(process.env.COGNITO_CLIENT_ID);
+const COGNITO_CLIENT_ID = getSecretValue(process.env.COGNITO_CLIENT_ID);
+
+console.log("details", process.env.COGNITO_USER_POOL_ID, process.env.COGNITO_CLIENT_ID);
+console.log("details", COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID);
 
 export const initiateLogin = async (email, password) => {
   const command = new AdminInitiateAuthCommand({
