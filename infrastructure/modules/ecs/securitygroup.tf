@@ -159,7 +159,7 @@ resource "aws_security_group_rule" "backend_dns_tcp" {
 }
 
 resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.api"
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
@@ -168,7 +168,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.ecr.dkr"
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
@@ -177,7 +177,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 }
 
 resource "aws_vpc_endpoint" "secretsmanager" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.secretsmanager"
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
@@ -186,7 +186,7 @@ resource "aws_vpc_endpoint" "secretsmanager" {
 }
 
 resource "aws_vpc_endpoint" "cognito_idp" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.${var.aws_region}.cognito-idp"
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
