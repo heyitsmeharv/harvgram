@@ -32,6 +32,7 @@ const ContentBox = styled(MotionBox)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   width: "90%",
   maxHeight: "80%",
+  overflow: "auto",
   maxWidth: 500,
   position: "relative",
   boxShadow: theme.shadows[5],
@@ -52,9 +53,7 @@ const LoaderOverlay = styled(Box)(({ theme }) => ({
 }));
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  position: 'absolute',
-  bottom: theme.spacing(2),
-  left: theme.spacing(4),
+  float: "right",
   backgroundColor: theme.palette.button.main,
   color: theme.palette.text.main,
   "&:hover": {
@@ -71,6 +70,7 @@ const UploadButton = styled(Box)(({ theme }) => ({
   color: theme.palette.text.main,
   textTransform: "none",
   height: "350px",
+  width: "350px",
   placeSelf: "center",
   display: "flex",
   alignItems: "center",
@@ -109,7 +109,6 @@ const StyledText = styled(Typography)(({ theme }) => ({
 }));
 
 export default function UploadOverlay({ open, user, isEdit, data, setData, onClose }) {
-  console.log("data", data);
   const theme = useTheme();
   const queryClient = useQueryClient();
   const [imagePreview, setImagePreview] = useState("");
