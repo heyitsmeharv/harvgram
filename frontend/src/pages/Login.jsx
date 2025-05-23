@@ -28,7 +28,7 @@ const FormWrapper = styled(motion.div)(({ theme }) => ({
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: "16px",
+  margin: "16px 0",
   color: theme.palette.text.main,
   "& .MuiInputLabel-root": {
     color: theme.palette.text.main,
@@ -76,22 +76,22 @@ const Login = () => {
   const [isNewPasswordRequired, setIsNewPasswordRequired] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [disableLoading, setDisableLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const redirectTo = "/home";
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowNewPassword = () => setShowNewPassword((show) => !show);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    setDisableLoading(false);
     try {
       const token = await login(email, password);
       if (token) {
-        setDisableLoading(true);
         if (token.challenge === "NEW_PASSWORD_REQUIRED") {
           authLogin({
             idToken: token.idToken,
@@ -124,7 +124,6 @@ const Login = () => {
 
   const handleSetNewPassword = async () => {
     setLoading(true);
-    setDisableLoading(false);
     try {
       const token = await forceChangePassword(user.session, email, newPassword);
       authLogin({
@@ -132,7 +131,6 @@ const Login = () => {
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
       });
-      setDisableLoading(true);
       setTimeout(() => {
         navigate(redirectTo, { replace: true });
       }, 2000);
@@ -143,7 +141,7 @@ const Login = () => {
     }
   };
 
-  if (loading && disableLoading) {
+  if (loading && !isNewPasswordRequired) {
     return <LoadingScreen />;
   }
 
@@ -193,20 +191,35 @@ const Login = () => {
           {isNewPasswordRequired && (
             <>
               <Typography variant="body" align="center" color={theme.palette.error.main}>Password Reset Required</Typography>
-              <StyledTextField
-                label="New Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                disabled={loading}
-                required
-              />
+              <FormControl required fullWidth variant="outlined">
+                <StyledInputLabel>New Password</StyledInputLabel>
+                <StyledOutlineInput
+                  label="New Password"
+                  type={showNewPassword ? 'text' : 'password'}
+                  variant="outlined"
+                  fullWidth
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  endAdornment={
+                    <InputAdornment sx={{ marginRight: "10px" }} position="end">
+                      <IconButton
+                        aria-label={
+                          showNewPassword ? 'hide the password' : 'display the password'
+                        }
+                        onClick={handleClickShowNewPassword}
+                        edge="end"
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  required
+                />
+              </FormControl>
             </>
           )}
           {error && <Typography variant="body" align="center" color={theme.palette.error.main}>{message}</Typography>}
-          <LoginButton type="submit" variant="contained" disabled={loading} fullWidth>
+          <LoginButton type="submit" variant="contained" disabled={loading && newPassword === ''} fullWidth>
             Login
           </LoginButton>
         </form>
